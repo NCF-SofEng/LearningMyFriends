@@ -10,6 +10,6 @@ public class App
     {
         // Create the new WebView
         new WebServer(8080);
-        new WebView("https://88939c2a5c23.ngrok.io", false, true);
+        new WebView("https://google.com", false, true);
     }
 }
