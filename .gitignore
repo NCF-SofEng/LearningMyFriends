@@ -1,6 +1,7 @@
 # Dirs
 .vscode/
 jcef-bundle/
+main/target
 
 # Files
 debug.log
