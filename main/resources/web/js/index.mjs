@@ -1,4 +1,6 @@
-// let html2canvas;
+window.Globals = {
+    editingSlide: 0
+}
 
 window.addEventListener("load", async () => {
     // Fetch the resource ./html2canvas.js
@@ -9,6 +11,7 @@ window.addEventListener("load", async () => {
     }
     console.log("Starting Post Load Bindings.")
     postLoad();
+    setInterval(renderSlides, 2000);
 });
 
 function postLoad() {
@@ -27,13 +30,18 @@ function postLoad() {
     });
 }
 
-function renderSlides() {
-    
+async function renderSlides() {
+    // Get all slides in an array
+    const slides = [ ...document.getElementsByClassName("slide") ];
+    const editingSlide = Globals.editingSlide;
+    // Render the slide and set the background image of the slide to the canvas.
+    const render = await html2canvas(document.getElementById("canvas"));
+    slides[editingSlide].style.backgroundImage = `url(${render.toDataURL()})`;
 }
 
-window.html2canvas(document.getElementById("canvas")).then(d => {
-    const link = document.createElement("a");
-    link.download = "dl.png";
-    link.href = d.toDataURL("image/png");
-    link.click();
-})
+// window.html2canvas(document.getElementById("canvas")).then(d => {
+//     const link = document.createElement("a");
+//     link.download = "dl.png";
+//     link.href = d.toDataURL("image/png");
+//     link.click();
+// })
