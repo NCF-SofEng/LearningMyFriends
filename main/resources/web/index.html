@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./css/index.css">
+    <script type="module" src="./js/index.mjs"></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <!-- Stores the entire 'header' layout. -->
+    <div class="header">
+        <!-- Stores each menu option on the lower-left hand side. -->
+        <div class="options headerChild">
+            <div class="optionsHolder">
+                <a class="headerOption">Edit</a>
+                <a class="headerOption">File</a>
+                <a class="headerOption">Tools</a>
+                <a class="headerOption">Animate</a>
+            </div>
+        </div>
+        <div class="title headerChild">
+            <h1 class="titleText" contenteditable="true" spellcheck="false">Unnamed Project</h1>
+        </div>
+        <div class="buttons headerChild">
+            <div class="buttonHolder">
+                <button class="headerButton"><a>Upload</a></button>
+                <button class="headerButton"><a>Present</a></button>
+                <button class="headerButton"><a>Slides</a></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Damn this took way less html then I thought it would jesus christ- -->
+    <div class="slideDeck">
+        <div class="slideContainer">
+            <div class="slide"></div>
+
+        </div>
+    </div>
+
+    <!-- This is the main Editor Portion -->
+
+    <div class="editor">
+        <div class="editorContainer">
+
+            <div class="canvasFrame">
+                <div class="canvas" id="canvas">
+                    <p style="font-size: 32px">Test from Rendering Context!</p>
+                    <ol style="padding-left: 20px">
+                        <li><p style="font-weight: bold;">Test Two!</p></li>
+                        <li><p style="color: blueviolet;">Aaaand test 3</p></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

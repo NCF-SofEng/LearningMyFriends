@@ -1,0 +1,6 @@
+# Dirs
+.vscode/
+jcef-bundle/
+
+# Files
+debug.log
