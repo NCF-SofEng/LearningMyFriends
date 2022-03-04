@@ -11,7 +11,7 @@ window.addEventListener("load", async () => {
     }
     console.log("Starting Post Load Bindings.")
     postLoad();
-    setInterval(renderSlides, 2000);
+    // setInterval(renderSlides, 2000);
 });
 
 function postLoad() {

@@ -47,7 +47,7 @@ public class WebView extends JFrame {
      * But to be more verbose, this CTOR keeps an instance of each object on the
      * way to the browser UI.
      */
-    WebView(String startURL, boolean useOSR, boolean isTransparent) throws UnsupportedPlatformException, CefInitializationException, IOException, InterruptedException {
+    WebView(String startURL, boolean useOSR, boolean isTransparent, int width, int height) throws UnsupportedPlatformException, CefInitializationException, IOException, InterruptedException {
         // (0) Initialize CEF using the maven loader    
         CefAppBuilder builder = new CefAppBuilder();
         // windowless_rendering_enabled must be set to false if not wanted. 
@@ -167,7 +167,7 @@ public class WebView extends JFrame {
         // getContentPane().add(address_, BorderLayout.NORTH);
         getContentPane().add(browerUI_, BorderLayout.CENTER);
         pack();
-        setSize(800, 600);
+        setSize(width, height);
         setVisible(true);
 
         // (7) To take care of shutting down CEF accordingly, it's important to call
