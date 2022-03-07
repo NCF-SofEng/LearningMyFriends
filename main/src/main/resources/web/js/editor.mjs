@@ -1,5 +1,7 @@
 import * as utils from "./utils.mjs";
 
+import { bindDefaults } from "./modules/textBox.mjs";
+
 window.editor = {
     canvas: document.getElementById("canvas"),
 
@@ -46,15 +48,25 @@ window.addEventListener("mousedown", (ev) => {
         }
     } else if (editor.currentTool == "text" && ev.target.id == "canvas") {
 
+        // Get the fontSize id value.
+        const fontSize = document.getElementById("fontSize").value;
+
         // Create a new text element at the mouse position.
         const text = document.createElement("div");
         text.classList.add("text");
         text.style.position = "absolute";
         text.style.left = `${ev.clientX - canvasLeft}px`;
         text.style.top = `${ev.clientY - canvasTop}px`;
-        text.style.width = "100px";
-        text.style.height = "100px";
+        text.style.minWidth = `${fontSize}px`;
+        text.style.minHeight = "10px";
+        text.style.width = "fit-content";
+        text.style.height = "fit-content";
         text.contentEditable = true;
+        text.style.fontSize = `${fontSize}px`;
+
+        // Use the font family in the fontFamily id element.
+        text.style.fontFamily = document.getElementById("fontFamily").value;
+
         // Add it at the end of the canvas.
         editor.canvas.appendChild(text);
 
@@ -70,11 +82,27 @@ window.addEventListener("mousedown", (ev) => {
         // });
 
         // Make 'enter' submit the text, as long as shift isn't pressed.
-        text.addEventListener("keypress", (e) => {
-            if (e.keyCode == 13 && !e.shiftKey) {
-                text.blur();
-            }
-        });
+        bindDefaults(text);
+    } else if (editor.currentTool == "image" && ev.target.id == "canvas") {
+        // Prompt the user for an image URL.
+        const url = prompt("Enter an image URL");
+        if (url) {
+            // Create a new image element at the mouse position.
+            const image = document.createElement("img");
+            image.classList.add("image");
+            image.style.position = "absolute";
+            image.style.left = `${ev.clientX - canvasLeft}px`;
+            image.style.top = `${ev.clientY - canvasTop}px`;
+            image.src = url;
+            // Add it at the end of the canvas.
+            editor.canvas.appendChild(image);
+        }
+    } else if (editor.currentTool == "delete") {
+        // Check if ev.target is a child in the canvas element.
+        if (utils.isParent(ev.target, editor.canvas, 4)) {
+            // console.log(ev.target)
+            ev.target.remove();
+        }
     }
 })
 
@@ -88,6 +116,37 @@ window.addEventListener("mousemove", (ev) => {
         // Set the element to absolute, then apply it's left and top to match the cursor.
         window.editor.movingContext.movingElement.style.left = `${mouseLeft - window.editor.movingContext.canvasLeft}px`;
         window.editor.movingContext.movingElement.style.top = `${mouseTop - window.editor.movingContext.canvasTop}px`;
+    }
+
+    if (window.editor.currentTool == "draw") {
+        // Return if mouse is not down.
+        if (!ev.buttons) {
+            return;
+        }
+
+        // Return if the mouse is not over the canvas.
+        if (ev.target != editor.canvas) {
+            return;
+        }
+
+        // Get the lineWidth id value.
+        const lineWidth = document.getElementById("brushSize").value;
+        // Get the lineColor id value.
+        const lineColor = document.getElementById("brushColor").value;
+
+        // create a new circular div with the color of the brush, and the size of the brush.
+        const circle = document.createElement("div");
+        circle.classList.add("circleShape");
+        circle.style.position = "absolute";
+        circle.style.left = `${ev.clientX - window.editor.movingContext.canvasLeft}px`;
+        circle.style.top = `${ev.clientY - window.editor.movingContext.canvasTop}px`;
+        circle.style.width = `${lineWidth}px`;
+        circle.style.height = `${lineWidth}px`;
+        circle.style.borderRadius = "50%";
+        circle.style.backgroundColor = lineColor;
+
+        // Add it at the end of the canvas.
+        editor.canvas.appendChild(circle);
     }
 });
 

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
+
+.menu {
+    background-color: white;
+    height: fit-content;
+    position: absolute;
+    text-align: center;
+    z-index: 9998;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.menu > p {
+    cursor: pointer;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.menu > p:hover {
+    text-decoration: underline;
+}
+
+.functionHolder {
+    display: flex;
+    margin-left: 10px;
+}
+
+.functionHolder > input {
+    width: 40px;
+    height: 16px;
+    margin-left: 5px;
+    text-align: center;
+}
+
+.functionHolder > select {
+    width: fit-content;
+    height: fit-content;
+    margin-left: 5px;
+}
+
+.clearButton {
+    height: fit-content;
+    width: fit-content;
+}

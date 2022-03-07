@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/menu.css">
     <script type="module" src="./js/index.mjs"></script>
     <script type="module" src="./js/editor.mjs"></script>
 
+    <!-- Highlighting -->
+    <script src="./libs/highlight.js/highlightjs.js"></script>
+    <link rel="stylesheet" href="./libs/highlight.js/highlightjs.css">
+
+    <!-- LaTeX -->
+    <script src="./libs/latex/latex.js"></script>
 
     <title>Document</title>
 </head>
@@ -18,22 +25,21 @@
         <!-- Stores each menu option on the lower-left hand side. -->
         <div class="options headerChild">
             <div class="optionsHolder">
-                <a class="headerOption">Edit</a>
-                <a class="headerOption">File</a>
-                <a class="headerOption">Tools</a>
-                <a class="headerOption">Animate</a>
+                <a class="headerOption" id="editButton">Edit</a>
+                <a class="headerOption" id="fileButton">File</a>
+                <a class="headerOption" id="toolsButton">Tools</a>
             </div>
         </div>
         <div class="title headerChild">
             <h1 class="titleText" contenteditable="true" spellcheck="false">Unnamed Project</h1>
-            <div class="functions">
-                
+            <div class="functions" id="functions">
+                <!-- Automatically Populated by button clicks! -->
             </div>
         </div>
         <div class="buttons headerChild">
             <div class="buttonHolder">
                 <button class="headerButton"><a>Upload</a></button>
-                <button class="headerButton"><a>Present</a></button>
+                <button class="headerButton" onclick="window.SlideShow.start()"><a>Present</a></button>
                 <button class="headerButton"><a>Slides</a></button>
             </div>
         </div>
@@ -41,9 +47,12 @@
 
     <!-- Damn this took way less html then I thought it would jesus christ- -->
     <div class="slideDeck">
-        <div class="slideContainer">
-            <div class="slide"></div>
-
+        <div class="slideContainer" id="slideContainer">
+            <img src="./assets/plus.png" id="plus" class="plus">
+            <div class="slide">
+                <h1 class="slideNumber">1</h1>
+                <img src="./assets/eye.png" class="hide">
+            </div>
         </div>
     </div>
 
@@ -54,7 +63,6 @@
 
             <div class="canvasFrame">
                 <div class="canvas" id="canvas">
-                    <p style="font-size: 32px">Test from Rendering Context!</p>
                 </div>
             </div>
         </div>
