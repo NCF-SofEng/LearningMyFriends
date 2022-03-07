@@ -1,6 +1,7 @@
 package com.ncfsofeng.learningmyfriends;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.nio.file.Files;
@@ -18,6 +19,7 @@ public class WebServer {
 
 
         this._server.createContext("/ping", new IndexHandler());
+        this._server.createContext("/update", new UpdateHandler());
 
         // Create a handler for every other path
         this._server.createContext("/", new FileHandler());
@@ -85,6 +87,28 @@ class FileHandler implements HttpHandler {
         t.sendResponseHeaders(200, content.length);
         // set the mime type header
         t.getResponseBody().write(content);
+        t.getResponseBody().close();
+    }
+}
+
+class UpdateHandler implements HttpHandler {
+    public void handle(HttpExchange t) throws IOException {
+        // Read Post Data from the request if it's a post request
+        // This block gets the incoming data from the FrontEnd and reads it to a string.
+        StringBuilder sb = new StringBuilder();
+        {
+            InputStream body = t.getRequestBody();
+            int b;
+            while ((b = body.read()) != -1) {
+                sb.append((char) b);
+            }
+        }
+        String postData = sb.toString();
+    
+        System.out.println(postData);
+        String response = "Hello World!";
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
         t.getResponseBody().close();
     }
 }

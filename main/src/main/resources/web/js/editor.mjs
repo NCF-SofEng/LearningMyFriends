@@ -5,7 +5,8 @@ import { bindDefaults } from "./modules/textBox.mjs";
 window.editor = {
     canvas: document.getElementById("canvas"),
 
-    currentTool: "text",
+    currentTool: "manipulator",
+    editingSlide: 1,
 
     movingContext: {
         moving: false,
@@ -17,7 +18,7 @@ window.editor = {
     utils: utils
 };
 
-window.addEventListener("mousedown", (ev) => {
+window.addEventListener("mousedown", async (ev) => {
     // If the user clicked on a child element of the 'canvas' id element with the currentTool as manipulator, 
     // It should start to follow the mouse position and move the element until the click is released.
 
@@ -45,6 +46,8 @@ window.addEventListener("mousedown", (ev) => {
             window.editor.movingContext.movingElement.style.position = "absolute";
             window.editor.movingContext.movingElement.style.left = `${mouseLeft - canvasLeft}px`;
             window.editor.movingContext.movingElement.style.top = `${mouseTop - canvasTop}px`;
+            window.editor.utils.slideEdited();
+
         }
     } else if (editor.currentTool == "text" && ev.target.id == "canvas") {
 
@@ -72,17 +75,9 @@ window.addEventListener("mousedown", (ev) => {
 
         text.focus();
 
-        // If it's submitted without being edited, remove it.
-        // text.addEventListener("blur", (e) => {
-        //     console.log(text.innerText)
-        //     if (text.innerText == "") {
-        //         console.log("removing")
-        //         text.remove();
-        //     }
-        // });
-
         // Make 'enter' submit the text, as long as shift isn't pressed.
         bindDefaults(text);
+
     } else if (editor.currentTool == "image" && ev.target.id == "canvas") {
         // Prompt the user for an image URL.
         const url = prompt("Enter an image URL");
@@ -96,12 +91,27 @@ window.addEventListener("mousedown", (ev) => {
             image.src = url;
             // Add it at the end of the canvas.
             editor.canvas.appendChild(image);
+            window.editor.utils.slideEdited();
         }
     } else if (editor.currentTool == "delete") {
         // Check if ev.target is a child in the canvas element.
         if (utils.isParent(ev.target, editor.canvas, 4)) {
             // console.log(ev.target)
             ev.target.remove();
+            window.editor.utils.slideEdited();
+        }
+    } else if (ev.target.className == "slide") {
+        // If the user clicked on a slide, set the current slide to the clicked slide.
+        const clickedSlide = Array.from(document.getElementById("slideContainer").children).indexOf(ev.target);
+
+        // Return if the user clicked on the slide they're editing.
+        if (clickedSlide == window.editor.editingSlide) {
+            return;
+        } else {
+            // Set the current slide to the clicked slide.
+            window.editor.editingSlide = clickedSlide;
+            const html = await requestSlide(window.editor.editingSlide);
+            window.editor.canvas.innerHTML = html;
         }
     }
 })
@@ -147,6 +157,7 @@ window.addEventListener("mousemove", (ev) => {
 
         // Add it at the end of the canvas.
         editor.canvas.appendChild(circle);
+        window.editor.utils.slideEdited();
     }
 });
 
@@ -154,5 +165,21 @@ window.addEventListener("mouseup", (ev) => {
     if (window.editor.movingContext.moving) {
         window.editor.movingContext.moving = false;
         window.editor.movingContext.movingElement = null;
+        slideEdited();
     }
 });
+
+async function requestSlide(num) {
+    console.log("Requesting Slide")
+    let result = "";
+    try {
+        const response = await fetch(`http://localhost:8080/getSlide?number=${num}`, {
+            method: "GET"
+        }).then((res) => res.text());
+        result = response;
+    } catch (_) {
+        alert(`Internal Error: Could not get slide ${num} from backend.`)
+    }
+
+    return result;
+}

@@ -2,10 +2,6 @@ import "./modules/slideInteractors.mjs"
 import "./presentation.mjs"
 import { Menu } from "./structs/Menu.mjs";
 
-window.Globals = {
-    editingSlide: 0
-}
-
 window.addEventListener("load", async () => {
     // Fetch the resource ./html2canvas.js
     const r = await fetch("/js/html2canvas.mjs")
@@ -15,7 +11,7 @@ window.addEventListener("load", async () => {
     }
     console.log("Starting Post Load Bindings.")
     postLoad();
-    setInterval(renderSlides, 2000);
+    // setInterval(renderSlides, 2000);
 });
 
 function postLoad() {
@@ -35,20 +31,13 @@ function postLoad() {
 }
 
 async function renderSlides() {
-    // Get all slides in an array
+    // Get all slides in an array. God i love the spread operator
     const slides = [ ...document.getElementsByClassName("slide") ];
     const editingSlide = Globals.editingSlide;
     // Render the slide and set the background image of the slide to the canvas.
     const render = await html2canvas(document.getElementById("canvas"));
     slides[editingSlide].style.backgroundImage = `url(${render.toDataURL()})`;
 }
-
-// window.html2canvas(document.getElementById("canvas")).then(d => {
-//     const link = document.createElement("a");
-//     link.download = "dl.png";
-//     link.href = d.toDataURL("image/png");
-//     link.click();
-// })
 
 window.addEventListener("load", () => {
     document.getElementById("toolsButton").addEventListener("click", (e) => {

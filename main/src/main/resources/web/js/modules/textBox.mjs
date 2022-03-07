@@ -23,7 +23,7 @@ export function bindDefaults(elem) {
                 elem.appendChild(generator.domFragment());
             }
         }
-
         hljs.highlightAll();
+        window.editor.utils.slideEdited();
     })
 }

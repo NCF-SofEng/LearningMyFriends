@@ -37,3 +37,14 @@ export function warnText() {
         alert("Warning! Font Sizes below 48 may not be visible on some projectors or large screens.")
     }
 }
+
+export function slideEdited() {
+    fetch("http://localhost:8080/update", {
+        method: "POST",
+        // Get the entire inner html of the editor.
+        body: window.editor.editingSlide + "|==|" + document.getElementById("canvas").innerHTML,
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
