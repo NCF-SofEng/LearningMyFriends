@@ -6,6 +6,8 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.sun.net.httpserver.*;
 
@@ -20,7 +22,8 @@ public class WebServer {
 
         this._server.createContext("/ping", new IndexHandler());
         this._server.createContext("/update", new UpdateHandler());
-
+        this._server.createContext("/getSlide", new SlideRequester());
+    
         // Create a handler for every other path
         this._server.createContext("/", new FileHandler());
         this._server.start();
@@ -28,6 +31,23 @@ public class WebServer {
 
     public HttpServer getServer() {
         return this._server;
+    }
+
+    public static Map<String, String> queryToMap(String query) {
+        if(query == null) {
+            return null;
+        }
+        Map<String, String> result = new HashMap<>();
+        for (String param : query.split("&")) {
+            String[] entry = param.split("=");
+            if (entry.length > 1) {
+                result.put(entry[0], entry[1]);
+            }else{
+                result.put(entry[0], "");
+            }
+        }
+
+        return result;
     }
 }
 
@@ -106,6 +126,22 @@ class UpdateHandler implements HttpHandler {
         String postData = sb.toString();
     
         System.out.println(postData);
+        String response = "Hello World!";
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+// This is the retrevial class.
+class SlideRequester implements HttpHandler {
+    public void handle(HttpExchange t) throws IOException {
+        Map<String, String> params = WebServer.queryToMap(t.getRequestURI().getQuery());
+        String number = params.get("number");
+        // Cast 'number' to string. 'num' is the requested slide number, will be called when you click on a slide on the frontend.
+        int num = Integer.parseInt(number);
+
+        // This just sends "Hello World!", it should send the HTML response.
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
