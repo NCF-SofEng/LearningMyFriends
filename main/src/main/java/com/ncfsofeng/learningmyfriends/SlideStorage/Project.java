@@ -22,27 +22,43 @@ public class Project {
         return instance;
     }
 
+    /**
+     * Checks to see if there's a slide at the specified index.
+     * @param slideNumber
+     * @return true if there's a slide at the specified index, false otherwise.
+     */
     public boolean search(int slideNumber){
-        if (slides.get(slideNumber) != null){
+        // Log slideNumber compcared to slides.size()
+        System.out.println("Searching for slide: " + slideNumber + "of size: " + slides.size());
+        if (slideNumber > slides.size() - 1) {
+            return false;
+        } else {
             return true;
         }
-        else {return false;}
     }
 
     public void addslide(int slideNumber, String slide){
-        slides.add(slideNumber, new Slide(slideNumber, slide));
+        // System.out.println("Slide Size: " + slides.size());
+        slides.add(new Slide(slideNumber, slide));
     }
 
     public String getSlide(int slideNum){
-        System.out.println("Getting slide " + slideNum + " of " + this.slides.size());
-        if (slideNum > slides.size()){
-            this.addslide(slideNum, "");
-        }
+        System.out.println("Getting slide " + slideNum + " of " + (this.slides.size() - 1));
+
+        // if (slideNum > slides.size() - 1) { // Commenting this so we can always remember <3
+
+        //     this.addslide(slideNum, "");
+        // }
+
         return slides.get(slideNum).getcurrentSlide();
     }
 
     public void editslide(int slideNumber, String slide){
-        slides.get(slideNumber).newEdit(new Slide(slideNumber, slide));
+        System.out.println("Editing Slide " + slideNumber + " of " + this.slides.size());
+        Slide s = slides.get(slideNumber);
+        System.out.println("Slide is null: " + (s == null));
+
+        s.newEdit(new Slide(slideNumber, slide));
     }
 
     public void removeslide(int slide){

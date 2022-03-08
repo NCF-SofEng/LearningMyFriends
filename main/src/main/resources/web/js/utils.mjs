@@ -39,12 +39,35 @@ export function warnText() {
 }
 
 export function slideEdited() {
-    fetch("http://localhost:8080/update", {
+    // console.log("Printing with :: " + (window.editor.editingSlide + "|==|" + document.getElementById("canvas").innerHTML))
+    // console.log("Edit Body :: " + (n.toString() ? n.toString() : window.editor.editingSlide.toString()) + "|==|" + window.editor.canvas.getInnerHTML());
+    fetch(`http://localhost:8080/update?slide=${window.editor.editingSlide}`, {
         method: "POST",
         // Get the entire inner html of the editor.
-        body: window.editor.editingSlide + "|==|" + document.getElementById("canvas").innerHTML,
+        body: window.editor.canvas.getInnerHTML() ? window.editor.canvas.getInnerHTML() : " ",
 
     }).catch((err) => {
         console.log(err)
     })
+}
+
+export function slideDeckSlides() {
+    return Array.from(document.querySelector("#slideContainer").children).filter(s => s.tagName == "DIV");
+}
+
+export async function swapSlide(slide, justCreated = false) {
+    if (slide == window.editor.editingSlide) {
+        return;
+    }
+
+    // get the slide's index
+    if (justCreated) {
+        window.editor.editingSlide = slideDeckSlides().length;
+        window.editor.canvas.innerHTML = "";
+        await slideEdited(window.editor.editingSlide);
+        console.log("created slide " + window.editor.editingSlide);
+    } else {
+        const html = await requestSlide(slide);
+        window.editor.canvas.innerHTML = html;
+    }
 }

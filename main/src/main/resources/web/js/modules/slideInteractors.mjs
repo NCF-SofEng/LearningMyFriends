@@ -14,7 +14,7 @@ window.addEventListener("click", (ev) => {
     }
 });
 
-window.addEventListener("click", (ev) => {
+window.addEventListener("click", async (ev) => {
     const target = ev.target;
     if (target.id == "plus") {
         // Create a new slide.
@@ -22,9 +22,14 @@ window.addEventListener("click", (ev) => {
             <div class="slide">
                 <h1 class="slideNumber">${document.getElementsByClassName("slide").length + 1}</h1>
                 <img src="./assets/eye.png" class="hide">
-            </div>`
+            </div>`;
 
         const slideDeck = document.getElementById("slideContainer");
         slideDeck.insertAdjacentHTML("beforeend", slideHtml);
+
+        const slides = window.editor.utils.slideDeckSlides()
+        const slide = slides[slides.length - 1];
+
+        window.editor.utils.swapSlide(slide, true);
     }
 });

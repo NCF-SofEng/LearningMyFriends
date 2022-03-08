@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.ncfsofeng.learningmyfriends.SlideStorage.Project;
 import com.sun.net.httpserver.*;
@@ -26,7 +27,7 @@ public class WebServer {
         this._server.createContext("/ping", new IndexHandler());
         this._server.createContext("/update", new UpdateHandler(this.project));
         this._server.createContext("/getSlide", new SlideRequester(this.project));
-    
+        this._server.createContext("/dump", new DumpSlides(this.project));
         // Create a handler for every other path
         this._server.createContext("/", new FileHandler());
         this._server.start();
@@ -122,6 +123,7 @@ class UpdateHandler implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
         // Read Post Data from the request if it's a post request
         // This block gets the incoming data from the FrontEnd and reads it to a string.
+        Map<String, String> params = WebServer.queryToMap(t.getRequestURI().getQuery());
         StringBuilder sb = new StringBuilder();
         {
             InputStream body = t.getRequestBody();
@@ -130,16 +132,22 @@ class UpdateHandler implements HttpHandler {
                 sb.append((char) b);
             }
         }
-        String postData = sb.toString();
-        String[] data = postData.split("\\|==\\|");
-        System.out.println(data[0]);
-        System.out.println(data[1]);
-        if (project.search(Integer.parseInt(data[0])) == true){
-            project.editslide(Integer.parseInt(data[0]), data[1]);
-        }
-        else{project.addslide(Integer.parseInt(data[0]), data[1]);}
 
-        System.out.println(postData);
+        int slideEditNumber = Integer.parseInt(params.get("slide")) - 1;
+        String slideEditContent = sb.toString();
+        // System.out.println("Creating new slide 1 :: " + slideEditNumber);
+
+        if (project.search(slideEditNumber) == true) {
+            System.out.println("Creating new slide 2");
+            project.editslide(slideEditNumber, slideEditContent);
+            System.out.println(5);
+        } else {
+            System.out.println("Creating new slide 3");
+            project.addslide(slideEditNumber, slideEditContent);
+            System.out.println(6);
+        }
+
+        // System.out.println(postData);
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
@@ -161,7 +169,27 @@ class SlideRequester implements HttpHandler {
         int num = Integer.parseInt(number);
 
         // This just sends "Hello World!", it should send the HTML response.
-        String response = project.getSlide(num-1);
+        String response = project.getSlide(num - 1);
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+class DumpSlides implements HttpHandler {
+    private Project project = Project.getInstance();
+    public DumpSlides(Project p) {
+        this.project = p;
+    }
+
+    public void handle(HttpExchange t) throws IOException {
+        StringBuilder b = new StringBuilder();
+
+        for (int i = 0; i < project.slides.size(); i++) {
+            b.append(project.getSlide(i) + "\n\n\n");
+        }
+
+        String response = b.toString();
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
         t.getResponseBody().close();
