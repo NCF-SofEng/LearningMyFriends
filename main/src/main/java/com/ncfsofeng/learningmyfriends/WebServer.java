@@ -24,8 +24,8 @@ public class WebServer {
 
 
         this._server.createContext("/ping", new IndexHandler());
-        this._server.createContext("/update", new UpdateHandler());
-        this._server.createContext("/getSlide", new SlideRequester());
+        this._server.createContext("/update", new UpdateHandler(this.project));
+        this._server.createContext("/getSlide", new SlideRequester(this.project));
     
         // Create a handler for every other path
         this._server.createContext("/", new FileHandler());
@@ -115,6 +115,10 @@ class FileHandler implements HttpHandler {
 }
 
 class UpdateHandler implements HttpHandler {
+    private Project project;
+    public UpdateHandler(Project p) {
+        this.project = p;
+    }
     public void handle(HttpExchange t) throws IOException {
         // Read Post Data from the request if it's a post request
         // This block gets the incoming data from the FrontEnd and reads it to a string.
@@ -138,6 +142,11 @@ class UpdateHandler implements HttpHandler {
 
 // This is the retrevial class.
 class SlideRequester implements HttpHandler {
+    private Project project;
+    public SlideRequester(Project p) {
+        this.project = p;
+    }
+
     public void handle(HttpExchange t) throws IOException {
         Map<String, String> params = WebServer.queryToMap(t.getRequestURI().getQuery());
         String number = params.get("number");
