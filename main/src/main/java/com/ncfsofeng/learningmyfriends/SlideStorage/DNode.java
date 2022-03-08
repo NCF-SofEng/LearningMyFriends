@@ -1,17 +1,17 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
-public class DNode<T extends Comparable>{
-    private T data;
+public class DNode{
+    private Slide data;
     private DNode next;
     private DNode previous;
 
-    public DNode(T the_data){
+    public DNode(Slide the_data){
         data = the_data;
         next = null;
         previous = null;
     }
 
-    public T getData(){
+    public Slide getData(){
         return data;
     }
 
@@ -23,7 +23,7 @@ public class DNode<T extends Comparable>{
         return previous;
     }
 
-    public void setData(T the_data){
+    public void setData(Slide the_data){
         data = the_data;
     }
 

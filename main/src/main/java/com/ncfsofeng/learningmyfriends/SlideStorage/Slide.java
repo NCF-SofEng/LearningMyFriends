@@ -11,20 +11,36 @@ public class Slide implements Comparable<Slide>{
         history.add(newSlide);
     }
 
+    public void newEdit(Slide newSlide){
+        this.slideNumber = newSlide.getSlideNumber();
+        this.history.add(newSlide.getHistory().getElement(0));
+        if (this.currentSlide < 4){
+            this.currentSlide++;
+        }
+    }
+
+    public String undo(){
+        if(this.currentSlide != 0){
+            this.currentSlide--;
+        }
+        return this.getcurrentSlide();
+    }
+    public String redo(){
+        if(this.currentSlide != 4){
+            this.currentSlide++;
+        }
+        return this.getcurrentSlide();
+    }
+
     public int getSlideNumber(){
         return this.slideNumber;
     }
-    public int getcurrentSlide(){
-        return this.currentSlide;
-    }
+    public String getcurrentSlide(){return this.history.getElement(this.currentSlide);}
     public SlideHistory getHistory(){
         return this.history;
     }
     public void setSlideNumber(int newSlideNumber){
         this.slideNumber = newSlideNumber;
-    }
-    public void setcurrentSlide(int newSlide){
-        this.currentSlide = newSlide;
     }
 
 

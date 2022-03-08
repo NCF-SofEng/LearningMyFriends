@@ -11,6 +11,10 @@ public class SlideHistory {
         }
     }
 
+    public String getElement(int position){
+        return this.list[position];
+    }
+
     public boolean isEmpty(){
         for (int i = 0; i < this.list.length; i++){
             if(this.list[i] != null){

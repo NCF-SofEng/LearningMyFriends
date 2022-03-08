@@ -4,7 +4,7 @@ package com.ncfsofeng.learningmyfriends.SlideStorage;
 //It supports any comparable data type
 
 
-public class DoubleLinked<T extends Comparable>{
+public class DoubleLinked{
     DNode start;
     DNode end;
     int len;
@@ -17,13 +17,13 @@ public class DoubleLinked<T extends Comparable>{
     }
 
     //Appends a new data item to the end of the list
-    public void append(T the_data){
+    public void append(Slide the_data){
         if (end == null){
-            end = new DNode<T>(the_data);
+            end = new DNode(the_data);
             start = end;
         }
         else{
-            DNode new_node = new DNode<T>(the_data);
+            DNode new_node = new DNode(the_data);
             DNode old_end = end;
 
             new_node.setPrevious(old_end);
@@ -40,7 +40,7 @@ public class DoubleLinked<T extends Comparable>{
 
     //Prints the contents of the list
     public void print(){
-        DNode<T> current = start;
+        DNode current = start;
         String to_print = "";
 
         while(current != null){
@@ -52,7 +52,7 @@ public class DoubleLinked<T extends Comparable>{
     }
 
     public void printBackwards(){
-        DNode<T> current = end;
+        DNode current = end;
         String to_print = "";
 
         while(current != null){

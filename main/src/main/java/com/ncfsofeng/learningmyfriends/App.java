@@ -12,7 +12,7 @@ public class App
 {
     public static void main( String[] args ) throws Exception
     {
-        Project p = new Project();
+        Project p = Project.getInstance();
         // Create the new WebView
         new WebServer(8080, p);
         // Get the height and width of the main display.

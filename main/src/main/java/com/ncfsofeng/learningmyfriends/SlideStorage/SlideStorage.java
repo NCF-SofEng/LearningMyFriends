@@ -1,11 +1,11 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
-public class SlideStorage<T extends Comparable> extends DoubleLinked{
+public class SlideStorage extends DoubleLinked{
 
-    public void insert(T data){
+    public void insert(Slide data){
         DNode current = start;
         DNode ended = end;
-        DNode new_node = new DNode<T>(data);
+        DNode new_node = new DNode(data);
         if ((current.getData().compareTo(data) == 0) || (current.getData().compareTo(data) >= 1)){
             new_node.setNext(current);
             start = new_node;
@@ -28,7 +28,7 @@ public class SlideStorage<T extends Comparable> extends DoubleLinked{
         this.len++;
     }
 
-    public boolean remove(T data){
+    public boolean remove(Slide data){
         DNode current = start;
         DNode ended = end;
         if (current.getData().compareTo(data) == 0){
@@ -56,21 +56,41 @@ public class SlideStorage<T extends Comparable> extends DoubleLinked{
         return false;
     }
 
-    public boolean search(T data){
+    public boolean editSlide(Slide data){
         DNode current = start;
         if (current.getData().compareTo(data) == 0){
+            current.getData().newEdit(data);
             return true;
         }
         if(end.getData().compareTo(data) == 0){
+            end.getData().newEdit(data);
             return true;
         }
         for (int i = 0; i < this.len - 1; i++){
             if (current.getData().compareTo(data) == 0){
+                current.getData().newEdit(data);
                 return true;
             }
             current = current.getNext();
         }
         return false;
+    }
+
+    public String retrieveSlide(int data){
+        DNode current = start;
+        if (current.getData().getSlideNumber() == data){
+            return current.getData().getcurrentSlide();
+        }
+        if(end.getData().getSlideNumber() == data){
+            return end.getData().getcurrentSlide();
+        }
+        for (int i = 0; i < this.len - 1; i++){
+            if (current.getData().getSlideNumber() == data){
+                return current.getData().getcurrentSlide();
+            }
+            current = current.getNext();
+        }
+        return "";
     }
 
 }
