@@ -25,7 +25,6 @@ export class SlideShow {
 }
 
 window.addEventListener("keypress", (ev) => {
-    console.log(ev.key)
     switch (ev.key) {
         case "Escape":
             SlideShow.stop();

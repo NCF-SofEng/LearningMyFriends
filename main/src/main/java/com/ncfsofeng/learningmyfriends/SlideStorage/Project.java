@@ -34,6 +34,7 @@ public class Project {
     }
 
     public String getSlide(int slideNum){
+        System.out.println("Getting slide " + slideNum + " of " + this.slides.size());
         if (slideNum > slides.size()){
             this.addslide(slideNum, "");
         }

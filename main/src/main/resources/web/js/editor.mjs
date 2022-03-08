@@ -170,7 +170,7 @@ window.addEventListener("mouseup", (ev) => {
 });
 
 async function requestSlide(num) {
-    console.log("Requesting Slide")
+    console.log("Requesting Slide " + num);
     let result = "";
     try {
         const response = await fetch(`http://localhost:8080/getSlide?number=${num}`, {

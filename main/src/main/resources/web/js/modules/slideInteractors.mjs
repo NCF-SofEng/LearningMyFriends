@@ -4,7 +4,6 @@ window.addEventListener("click", (ev) => {
     if (target.className == "hide") {
         const slideNumberElement = parent.querySelector(".slideNumber");
         if (slideNumberElement.innerText == "Hidden") {
-            console.log(1)
             const slideDeck = document.getElementById("slideContainer");
             // Get the current position of this slide in the slide deck.
             const slidePosition = Array.from(slideDeck.children).indexOf(parent);
