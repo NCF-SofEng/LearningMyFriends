@@ -6,7 +6,10 @@ public class SlideStorage extends DoubleLinked{
         DNode current = start;
         DNode ended = end;
         DNode new_node = new DNode(data);
-        if ((current.getData().compareTo(data) == 0) || (current.getData().compareTo(data) >= 1)){
+        if (start == null){
+            this.append(data);
+        }
+        else if ((current.getData().compareTo(data) == 0) || (current.getData().compareTo(data) >= 1)){
             new_node.setNext(current);
             start = new_node;
         }
