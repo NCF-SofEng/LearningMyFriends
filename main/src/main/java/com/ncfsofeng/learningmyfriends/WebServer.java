@@ -9,15 +9,18 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ncfsofeng.learningmyfriends.SlideStorage.Project;
 import com.sun.net.httpserver.*;
 
 public class WebServer {
     private int _port;
     private HttpServer _server;
+    private Project project;
 
-    public WebServer(int port) throws IOException {
+    public WebServer(int port, Project p) throws IOException {
         this._port = port;
         this._server = HttpServer.create(new InetSocketAddress(this._port), 0);
+        this.project = p;
 
 
         this._server.createContext("/ping", new IndexHandler());
