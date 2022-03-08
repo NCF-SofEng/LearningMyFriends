@@ -131,10 +131,14 @@ class UpdateHandler implements HttpHandler {
             }
         }
         String postData = sb.toString();
-        if (project.editSlide(Integer.parseInt(postData.substring(0, 1)), postData) == false) {
-            project.addSlide(Integer.parseInt(postData.substring(0, 1)), postData);
+        String[] data = postData.split("\\|==\\|");
+        System.out.println(data[0]);
+        System.out.println(data[1]);
+        if (project.search(Integer.parseInt(data[0])) == true){
+            project.editslide(Integer.parseInt(data[0]), data[1]);
         }
-        System.out.println(project.getSlides().retrieveSlide(1));
+        else{project.addslide(Integer.parseInt(data[0]), data[1]);}
+
         System.out.println(postData);
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
@@ -157,7 +161,7 @@ class SlideRequester implements HttpHandler {
         int num = Integer.parseInt(number);
 
         // This just sends "Hello World!", it should send the HTML response.
-        String response = project.getSlides().retrieveSlide(num);
+        String response = project.getSlide(num-1);
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
         t.getResponseBody().close();

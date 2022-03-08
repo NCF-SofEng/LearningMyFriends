@@ -8,7 +8,7 @@ public class Slide implements Comparable<Slide>{
     public Slide(int slideNumber, String newSlide){
         this.slideNumber = slideNumber;
         this.currentSlide = 0;
-        history.add(newSlide);
+        this.history.add(newSlide);
     }
 
     public void newEdit(Slide newSlide){

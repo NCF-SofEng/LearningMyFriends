@@ -6,20 +6,24 @@ public class SlideStorage extends DoubleLinked{
         DNode current = start;
         DNode ended = end;
         DNode new_node = new DNode(data);
-        if (start == null){
+        if (ended == null){
+            System.out.println("Added slide: " + data.getSlideNumber());
             this.append(data);
         }
-        else if ((current.getData().compareTo(data) == 0) || (current.getData().compareTo(data) >= 1)){
+        else if (current.getData().getSlideNumber() > data.getSlideNumber()){
+            System.out.println("Added slide: " + data.getSlideNumber());
             new_node.setNext(current);
             start = new_node;
         }
-        else if ((end.getData().compareTo(data) == 0) || (end.getData().compareTo(data) <= -1)){
+        else if (ended.getData().getSlideNumber() < data.getSlideNumber()){
+            System.out.println("Added slide: " + data.getSlideNumber());
             ended.setNext(new_node);
             new_node.setPrevious(ended);
             end = new_node;
         }
         else{
-            for(int i = 0; current.getData().compareTo(data) <= -1; i++){
+            System.out.println("Added slide: " + data.getSlideNumber());
+            for(int i = 0; current.getData().getSlideNumber() > data.getSlideNumber(); i++){
                 current = current.getNext();
             }
             DNode new_prev = current.getPrevious();
@@ -61,29 +65,37 @@ public class SlideStorage extends DoubleLinked{
 
     public boolean editSlide(Slide data){
         DNode current = start;
-        if (current.getData().compareTo(data) == 0){
+        if (current == null){
+            return false;
+        }
+        else if (current.getData().compareTo(data) == 0){
             current.getData().newEdit(data);
             return true;
         }
-        if(end.getData().compareTo(data) == 0){
+        else if(end.getData().compareTo(data) == 0){
             end.getData().newEdit(data);
             return true;
         }
-        for (int i = 0; i < this.len - 1; i++){
-            if (current.getData().compareTo(data) == 0){
-                current.getData().newEdit(data);
-                return true;
+        else {
+            for (int i = 0; i < this.len - 1; i++) {
+                if (current.getData().compareTo(data) == 0) {
+                    current.getData().newEdit(data);
+                    return true;
+                }
+                current = current.getNext();
             }
-            current = current.getNext();
         }
         return false;
     }
 
     public String retrieveSlide(int data){
         DNode current = start;
+        //System.out.println("Comparative slide: " + current.getData().getSlideNumber());
         if (current.getData().getSlideNumber() == data){
             return current.getData().getcurrentSlide();
         }
+        //System.out.println(end.getData().getSlideNumber());
+        //System.out.println(start.getData().getSlideNumber());
         if(end.getData().getSlideNumber() == data){
             return end.getData().getcurrentSlide();
         }
