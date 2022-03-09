@@ -86,3 +86,40 @@ export async function requestSlide(num) {
 
     return result;
 }
+
+export async function runCodeBlock(elem) {
+    let codeBody;
+    if (elem.tagName == "CODE") {
+        codeBody = elem.innerText;
+    } else if (elem.tagName == "PRE") {
+        codeBody = elem.children.item(0).innerText;
+    } else {
+        return "|NONE|";
+    }
+
+    return await fetch(`http://api.naminginprogress.com/v1/eval/python`, {
+        method: "POST",
+        body: codeBody,
+        headers: {
+            "Access-Control-Allow-Origin": "*"
+        }
+    }).then((res) => res.text());
+}
+
+export async function undoRedo(action, slideNumber = window.editor.editingSlide) {
+    try {
+        await fetch(`http://localhost:8080/undoredo?action=${action}&number=${slideNumber}`, {
+            method: "POST",
+        })
+
+        try {
+            await requestSlide(slideNumber).then((res) => {
+                window.editor.canvas.innerHTML = res;
+            })
+        } catch (_) {
+            console.log("Could not fetch slide after undo/redo.")
+        }
+    } catch (_) {
+        alert("Internal Error: Could not undo/redo.")
+    }
+}

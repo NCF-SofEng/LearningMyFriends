@@ -9,7 +9,7 @@ window.addEventListener("load", async () => {
     if (eval(text) == true) {
         console.log("HTML 2 Canvas Loaded Successfully.");
     }
-    console.log("Starting Post Load Bindings.")
+    console.log("Starting Post Load Bindings. 2222")
     postLoad();
     // setInterval(renderSlides, 2000);
 });
@@ -28,6 +28,13 @@ function postLoad() {
             elem.blur();
         }
     });
+
+    // Write the first slide to backend.
+    // window.editor.utils.slideEdited(1);
+    // const slides = window.editor.utils.slideDeckSlides()
+    // const slide = slides[slides.length - 1];
+
+    // window.editor.utils.swapSlide(slide, true);
 }
 
 async function renderSlides() {
@@ -42,6 +49,10 @@ async function renderSlides() {
 window.addEventListener("load", () => {
     document.getElementById("toolsButton").addEventListener("click", (e) => {
         let m = new Menu(e.target);
+        m.createButton("Run Code", () => {
+            window.editor.currentTool = "eval"
+            document.getElementById("functions").innerHTML = `Click a Code Block to Run it!`;
+        });
         m.createButton("Manipulate", () => {
             window.editor.currentTool = "manipulator"
             document.getElementById("functions").innerHTML = ``;
@@ -73,7 +84,28 @@ window.addEventListener("load", () => {
             window.editor.utils.setBackground(url);
         });
         m.render();
-    })
+    });
+
+    document.getElementById("fileButton").addEventListener("click", async (e) => {
+        let m = new Menu(e.target);
+        m.createButton("Undo", () => {
+            window.editor.utils.undo();
+        });
+
+        m.createButton("Redo", () => {
+            window.editor.utils.redo();
+        });
+
+        m.createButton("Save", () => {
+            window.editor.utils.save();
+        });
+
+        m.createButton("Load", () => {
+            window.editor.utils.load();
+        });
+
+        m.render();
+    });
 })
 
 // Create the Menus onclick

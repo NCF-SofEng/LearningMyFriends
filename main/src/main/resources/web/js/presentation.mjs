@@ -5,6 +5,7 @@ export class SlideShow {
 
     static currentSlide = 1;
 
+    static pointer = false;
     static awaitingResult = false;
 
     static start() {
@@ -74,6 +75,7 @@ export class SlideShow {
 }
 
 window.addEventListener("keydown", (ev) => {
+    if (!SlideShow.running) return;
     const slideCount = window.editor.utils.slideDeckSlides().length;
     console.log(ev.key)
     switch (ev.key) {
@@ -93,6 +95,17 @@ window.addEventListener("keydown", (ev) => {
             if ((SlideShow.currentSlide + 1) <= slideCount) {
                 SlideShow.currentSlide++;
                 SlideShow.presentSlide(SlideShow.currentSlide);
+            }
+        break;
+        case "p":
+            if (SlideShow.pointer == false) {
+                // Set the pointer in canvas to crosshair
+                SlideShow.slideshowCanvas.style.cursor = "crosshair";
+                SlideShow.pointer = true;
+            } else {
+                // Set the pointer in canvas to default
+                SlideShow.slideshowCanvas.style.cursor = "default";
+                SlideShow.pointer = false;
             }
         break;
     }

@@ -113,6 +113,15 @@ window.addEventListener("mousedown", async (ev) => {
             const html = await requestSlide(window.editor.editingSlide);
             window.editor.canvas.innerHTML = html;
         }
+    } else if (editor.currentTool == "eval" && (ev.target.tagName == "CODE" || ev.target.tagName == "PRE")) {
+        console.log("Codeblock Hit")
+        const r = await window.editor.utils.runCodeBlock(ev.target);
+        if (r == "|NONE|") {
+            console.log("None Result")
+            return;
+        } else {
+            alert("Evaluated Response:\n" + r);
+        }
     }
 })
 
