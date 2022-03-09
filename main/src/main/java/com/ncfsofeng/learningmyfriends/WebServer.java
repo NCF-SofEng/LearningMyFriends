@@ -186,10 +186,77 @@ class DumpSlides implements HttpHandler {
         StringBuilder b = new StringBuilder();
 
         for (int i = 0; i < project.slides.size(); i++) {
-            b.append(project.getSlide(i) + "\n\n\n");
+            b.append(project.getSlide(i) + "|MYSPECIALDELIM|");
         }
 
         String response = b.toString();
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+class ProjectNameUpdate implements HttpHandler {
+    private Project project = Project.getInstance();
+    public ProjectNameUpdate(Project p) {
+        this.project = p;
+    }
+
+    public void handle(HttpExchange t) throws IOException {
+        Map<String, String> params = WebServer.queryToMap(t.getRequestURI().getQuery());
+
+        // 'name' is the rename.
+        String name = params.get("name");
+
+
+        String response = "Hello World!";
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+class UndoRedo implements HttpHandler {
+    private Project project = Project.getInstance();
+    public UndoRedo(Project p) {
+        this.project = p;
+    }
+
+    public void handle(HttpExchange t) throws IOException {
+        Map<String, String> params = WebServer.queryToMap(t.getRequestURI().getQuery());
+
+        // Will be either "undo" or "redo"
+        String action = params.get("action");
+        int slideNumber = Integer.parseInt(params.get("number")) - 1;
+
+        String response = "Hello World!";
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+class Load implements HttpHandler {
+    private Project project = Project.getInstance();
+    public Load(Project p) {
+        this.project = p;
+    }
+
+    public void handle(HttpExchange t) throws IOException {
+        // Read the body of t
+        StringBuilder sb = new StringBuilder();
+        {
+            InputStream body = t.getRequestBody();
+            int b;
+            while ((b = body.read()) != -1) {
+                sb.append((char) b);
+            }
+        }
+
+        // This contains all the data read from the file.
+        String fileBody = sb.toString();
+
+        String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
         t.getResponseBody().close();
