@@ -28,6 +28,12 @@ public class WebServer {
         this._server.createContext("/update", new UpdateHandler(this.project));
         this._server.createContext("/getSlide", new SlideRequester(this.project));
         this._server.createContext("/dump", new DumpSlides(this.project));
+
+        this._server.createContext("/load", new Load(this.project));
+        this._server.createContext("/save", new Save(this.project));
+        this._server.createContext("/undoredo", new UndoRedo(this.project));
+        this._server.createContext("/projectName", new ProjectNameUpdate(this.project));
+
         // Create a handler for every other path
         this._server.createContext("/", new FileHandler());
         this._server.start();
@@ -255,6 +261,22 @@ class Load implements HttpHandler {
 
         // This contains all the data read from the file.
         String fileBody = sb.toString();
+
+        String response = "Hello World!";
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+class Save implements HttpHandler {
+    private Project project = Project.getInstance();
+    public Save(Project p) {
+        this.project = p;
+    }
+
+    public void handle(HttpExchange t) throws IOException {
+        // This is called when the user clicks the save button on the frontend.
 
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
