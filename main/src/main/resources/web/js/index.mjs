@@ -88,11 +88,11 @@ window.addEventListener("load", () => {
 
     document.getElementById("fileButton").addEventListener("click", async (e) => {
         let m = new Menu(e.target);
-        m.createButton("Undo", () => {
+        m.createButton("Undo", async () => {
             await window.editor.utils.undoRedo("undo");
         });
 
-        m.createButton("Redo", () => {
+        m.createButton("Redo", async () => {
             await window.editor.utils.undoRedo("redo");
         });
 
@@ -106,6 +106,6 @@ window.addEventListener("load", () => {
 
         m.render();
     });
-})
+});
 
 // Create the Menus onclick
