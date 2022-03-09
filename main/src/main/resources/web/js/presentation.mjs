@@ -1,17 +1,52 @@
 export class SlideShow {
     static running = false;
     static slideshowRootDiv = null;
-    static currentSlide = 0;
+    static slideshowCanvas = null;
+
+    static currentSlide = 1;
+
+    static awaitingResult = false;
 
     static start() {
         if (window.SlideShow.running) return;
 
+        window.SlideShow.running = true;
         // Create a new div that fits over the entire viewport.
         SlideShow.slideshowRootDiv = document.createElement("div");
-        SlideShow.slideshowRootDiv.classList.add("slideshowRootDiv");
+        SlideShow.slideshowCanvas = document.createElement("div");
 
-        // Append it to the dom, and set it to fullscreen.
+        SlideShow.slideshowRootDiv.classList.add("slideshowRootDiv");
+        SlideShow.slideshowCanvas.classList.add("slideshowCanvas");
+
+        // Append slideshowRootDiv at the bottom of body.
         document.body.appendChild(SlideShow.slideshowRootDiv);
+        SlideShow.slideshowRootDiv.appendChild(SlideShow.slideshowCanvas);
+
+        SlideShow.sizeCanvas();
+        this.presentSlide(SlideShow.currentSlide);
+    }
+    
+    static sizeCanvas() {
+        /*
+        The editor's canvas is of the size: width: 1056px; height: 642px;
+        Calculate the amount of zoom needed to fit the editor's canvas into the full screen, preserving aspect ratio. 
+        */
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const editorWidth = 1056;
+        const editorHeight = 642;
+
+        const zoom = Math.min(width / editorWidth, height / editorHeight);
+
+        // console.log(zoom);
+        // console.log(`${editorWidth * zoom}px width`);
+        // console.log(`${editorHeight * zoom}px height`);
+        // SlideShow.slideshowCanvas.style.width = `${editorWidth * zoom}px`;
+        // SlideShow.slideshowCanvas.style.height = `${editorHeight * zoom}px`;
+        SlideShow.slideshowCanvas.style.zoom = zoom;
+
     }
 
     static stop() {
@@ -20,20 +55,45 @@ export class SlideShow {
         SlideShow.running = false;
         SlideShow.slideshowRootDiv.remove();
         SlideShow.slideshowRootDiv = null;
-        SlideShow.currentSlide = 0;
+        SlideShow.currentSlide = 1;
+    }
+
+    static async presentSlide(slideNumber) {
+        try {
+            // Insure the amount of slides is not out of bounds.
+            const slideCount = window.editor.utils.slideDeckSlides().length;
+            if (slideCount == 0) return;
+
+            const html = await window.editor.utils.requestSlide(slideNumber);
+            SlideShow.slideshowCanvas.innerHTML = html;
+        } catch (e) {
+            console.log(e);
+            SlideShow.stop();
+        }
     }
 }
 
-window.addEventListener("keypress", (ev) => {
+window.addEventListener("keydown", (ev) => {
+    const slideCount = window.editor.utils.slideDeckSlides().length;
+    console.log(ev.key)
     switch (ev.key) {
         case "Escape":
             SlideShow.stop();
         break;
-        case "Left": 
-            SlideShow.pageLeft();
+        case "ArrowLeft": 
+        case "Left":
+            // Make sure paging left wouldn't go out of bounds.
+            if ((SlideShow.currentSlide - 1) >= 1 && SlideShow.currentSlide > 1) {
+                SlideShow.currentSlide--;
+                SlideShow.presentSlide(SlideShow.currentSlide);
+            }
         break;
-        case "Right":
-            SlideShow.pageRight();
+        case "ArrowRight":
+            // If currentSlide + 1 wont go out of bounds, then present the next slide.
+            if ((SlideShow.currentSlide + 1) <= slideCount) {
+                SlideShow.currentSlide++;
+                SlideShow.presentSlide(SlideShow.currentSlide);
+            }
         break;
     }
 })

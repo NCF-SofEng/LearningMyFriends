@@ -71,3 +71,18 @@ export async function swapSlide(slide, justCreated = false) {
         window.editor.canvas.innerHTML = html;
     }
 }
+
+export async function requestSlide(num) {
+    console.log("Requesting Slide " + num);
+    let result = "";
+    try {
+        const response = await fetch(`http://localhost:8080/getSlide?number=${num}`, {
+            method: "GET"
+        }).then((res) => res.text());
+        result = response;
+    } catch (_) {
+        alert(`Internal Error: Could not get slide ${num} from backend.`)
+    }
+
+    return result;
+}
