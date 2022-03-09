@@ -14,9 +14,6 @@ public class SlideHistory {
     public String getElement(int position){
         return this.list.get(position);
     }
-
-
-
     //This adds a new number to the end [back-end] of the sequence
     public void add(String history){
         if (this.list.size() > 4){
