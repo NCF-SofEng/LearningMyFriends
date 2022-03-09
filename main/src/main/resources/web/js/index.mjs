@@ -89,11 +89,11 @@ window.addEventListener("load", () => {
     document.getElementById("fileButton").addEventListener("click", async (e) => {
         let m = new Menu(e.target);
         m.createButton("Undo", () => {
-            window.editor.utils.undo();
+            await window.editor.utils.undoRedo("undo");
         });
 
         m.createButton("Redo", () => {
-            window.editor.utils.redo();
+            await window.editor.utils.undoRedo("redo");
         });
 
         m.createButton("Save", () => {
