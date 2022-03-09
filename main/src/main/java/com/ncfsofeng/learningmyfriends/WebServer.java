@@ -138,13 +138,13 @@ class UpdateHandler implements HttpHandler {
         // System.out.println("Creating new slide 1 :: " + slideEditNumber);
 
         if (project.search(slideEditNumber) == true) {
-            System.out.println("Creating new slide 2");
+            //System.out.println("Creating new slide 2");
             project.editslide(slideEditNumber, slideEditContent);
-            System.out.println(5);
+            //System.out.println(5);
         } else {
-            System.out.println("Creating new slide 3");
+            //System.out.println("Creating new slide 3");
             project.addslide(slideEditNumber, slideEditContent);
-            System.out.println(6);
+            //System.out.println(6);
         }
 
         // System.out.println(postData);
