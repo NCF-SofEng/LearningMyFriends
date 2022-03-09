@@ -1,6 +1,8 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
-import java.sql.Array;
+import java.util.Scanner;
+import java.io.*;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class Project {
@@ -37,8 +39,32 @@ public class Project {
         }
     }
 
-    public void save(){
+    public void save() {
+        try{
+            FileWriter writer = new FileWriter(this.projectName + ".txt");
+            for (int i = 0; i < slides.size(); i++) {
+                writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "|==|" + slides.get(i).getcurrentSlide() + "\\");
+            }
+            writer.close();
+        }
+        catch(IOException e){System.out.println("Error while writing to file");}
+    }
 
+
+
+    public void load(File savedProject){
+        try{
+            String[] savedName= savedProject.getName().split(".");
+            this.projectName = savedName[0];
+            Scanner scanner = new Scanner(savedProject);
+            String[] currentSlide;
+            while (scanner.hasNextLine()) {
+                currentSlide =  scanner.nextLine().split("|==|");
+                this.addslide(Integer.parseInt(currentSlide[0]), currentSlide[1]);
+            }
+            scanner.close();
+        }
+        catch(IOException e){System.out.println("Error while reading file");}
     }
 
     public void addslide(int slideNumber, String slide){
