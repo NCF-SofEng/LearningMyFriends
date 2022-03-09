@@ -37,6 +37,10 @@ public class Project {
         }
     }
 
+    public void save(){
+
+    }
+
     public void addslide(int slideNumber, String slide){
         // System.out.println("Slide Size: " + slides.size());
         slides.add(new Slide(slideNumber, slide));
@@ -57,7 +61,6 @@ public class Project {
         System.out.println("Editing Slide " + slideNumber + " of " + this.slides.size());
         Slide s = slides.get(slideNumber);
         System.out.println("Slide is null: " + (s == null));
-
         s.newEdit(new Slide(slideNumber, slide));
     }
 
