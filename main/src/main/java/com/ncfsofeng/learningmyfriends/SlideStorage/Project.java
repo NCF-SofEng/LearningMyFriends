@@ -1,5 +1,7 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Scanner;
 import java.io.*;
 import java.nio.Buffer;
@@ -41,16 +43,33 @@ public class Project {
 
     public void save() {
         try{
-            FileWriter writer = new FileWriter(this.projectName + ".txt");
-            for (int i = 0; i < slides.size(); i++) {
-                writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "|==|" + slides.get(i).getcurrentSlide() + "\\");
-            }
-            writer.close();
+
+
+                JFrame parentFrame = new JFrame();
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Specify a file to save");
+                int userSelection = fileChooser.showSaveDialog(parentFrame);
+                File fileToSave;
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    fileToSave = fileChooser.getSelectedFile();
+                    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+                    FileWriter writer = new FileWriter(fileToSave);
+                    for (int i = 0; i < slides.size(); i++) {
+                        writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "|==|" + slides.get(i).getcurrentSlide() + "\\");
+                    }
+                    writer.close();
+                }
         }
         catch(IOException e){System.out.println("Error while writing to file");}
     }
 
+    public String undo(int slideNum){
+        return slides.get(slideNum).undo();
+    }
 
+    public String redo(int slideNum){
+        return slides.get(slideNum).redo();
+    }
 
     public void load(File savedProject){
         try{

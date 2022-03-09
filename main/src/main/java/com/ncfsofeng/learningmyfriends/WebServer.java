@@ -213,7 +213,7 @@ class ProjectNameUpdate implements HttpHandler {
 
         // 'name' is the rename.
         String name = params.get("name");
-
+        this.project.setProjectName(name);
 
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
@@ -234,6 +234,12 @@ class UndoRedo implements HttpHandler {
         // Will be either "undo" or "redo"
         String action = params.get("action");
         int slideNumber = Integer.parseInt(params.get("number")) - 1;
+        if (action.equalsIgnoreCase("undo")){
+            this.project.undo(slideNumber);
+        }
+        else{
+            this.project.redo(slideNumber);
+        }
 
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
@@ -277,7 +283,7 @@ class Save implements HttpHandler {
 
     public void handle(HttpExchange t) throws IOException {
         // This is called when the user clicks the save button on the frontend.
-
+        this.project.save();
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
