@@ -267,6 +267,7 @@ class Load implements HttpHandler {
         String fileContents = sb.toString();
         // Send the contents of slide 1 at the end of this pleaseeeee
         this.project.load(fileContents);
+
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());

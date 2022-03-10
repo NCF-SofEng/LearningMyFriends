@@ -19,6 +19,7 @@ window.editor = {
 };
 
 window.addEventListener("mousedown", async (ev) => {
+    console.log(ev.target);
     // If the user clicked on a child element of the 'canvas' id element with the currentTool as manipulator, 
     // It should start to follow the mouse position and move the element until the click is released.
 
@@ -29,25 +30,18 @@ window.addEventListener("mousedown", async (ev) => {
     const canvasTop = editor.canvas.getBoundingClientRect().top;
     window.editor.movingContext.canvasTop = canvasTop;
 
-    if (editor.currentTool == "manipulator") {
-        // Check if ev.target is a child in the canvas element.
-        if (utils.isParent(ev.target, editor.canvas, 4)) {
-            // console.log(ev.target)
-            window.editor.movingContext.moving = true;
-            window.editor.movingContext.movingElement = ev.target;
+    if (ev.target.className == "slide") {
+        // If the user clicked on a slide, set the current slide to the clicked slide.
+        const clickedSlide = Array.from(document.getElementById("slideContainer").children).indexOf(ev.target);
 
-            
-            // Calculate how far left the mouse is from the left of the window.
-            const mouseLeft = ev.clientX;
-            // Calculate how far top the mouse is from the top of the window.
-            const mouseTop = ev.clientY;
-
-            // Set the element to absolute, then apply it's left and top to match the cursor.
-            window.editor.movingContext.movingElement.style.position = "absolute";
-            window.editor.movingContext.movingElement.style.left = `${mouseLeft - canvasLeft}px`;
-            window.editor.movingContext.movingElement.style.top = `${mouseTop - canvasTop}px`;
-            window.editor.utils.slideEdited();
-
+        // Return if the user clicked on the slide they're editing.
+        if (clickedSlide == window.editor.editingSlide) {
+            return;
+        } else {
+            // Set the current slide to the clicked slide.
+            window.editor.editingSlide = clickedSlide;
+            const html = await requestSlide(window.editor.editingSlide);
+            window.editor.canvas.innerHTML = html;
         }
     } else if (editor.currentTool == "text" && ev.target.id == "canvas") {
 
@@ -100,18 +94,24 @@ window.addEventListener("mousedown", async (ev) => {
             ev.target.remove();
             window.editor.utils.slideEdited();
         }
-    } else if (ev.target.className == "slide") {
-        // If the user clicked on a slide, set the current slide to the clicked slide.
-        const clickedSlide = Array.from(document.getElementById("slideContainer").children).indexOf(ev.target);
+    } else if (editor.currentTool == "manipulator") {
+        // Check if ev.target is a child in the canvas element.
+        if (utils.isParent(ev.target, editor.canvas, 4)) {
+            // console.log(ev.target)
+            window.editor.movingContext.moving = true;
+            window.editor.movingContext.movingElement = ev.target;
 
-        // Return if the user clicked on the slide they're editing.
-        if (clickedSlide == window.editor.editingSlide) {
-            return;
-        } else {
-            // Set the current slide to the clicked slide.
-            window.editor.editingSlide = clickedSlide;
-            const html = await requestSlide(window.editor.editingSlide);
-            window.editor.canvas.innerHTML = html;
+            
+            // Calculate how far left the mouse is from the left of the window.
+            const mouseLeft = ev.clientX;
+            // Calculate how far top the mouse is from the top of the window.
+            const mouseTop = ev.clientY;
+
+            // Set the element to absolute, then apply it's left and top to match the cursor.
+            window.editor.movingContext.movingElement.style.position = "absolute";
+            window.editor.movingContext.movingElement.style.left = `${mouseLeft - canvasLeft}px`;
+            window.editor.movingContext.movingElement.style.top = `${mouseTop - canvasTop}px`;
+            window.editor.utils.slideEdited();
         }
     } else if (editor.currentTool == "eval" && (ev.target.tagName == "CODE" || ev.target.tagName == "PRE")) {
         console.log("Codeblock Hit")
@@ -174,7 +174,7 @@ window.addEventListener("mouseup", (ev) => {
     if (window.editor.movingContext.moving) {
         window.editor.movingContext.moving = false;
         window.editor.movingContext.movingElement = null;
-        slideEdited();
+        window.editor.utils.slideEdited();
     }
 });
 

@@ -152,13 +152,52 @@ export async function save() {
     } catch (_) {};
 }
 
+export async function formatSlides() {
+    try {
+        console.log(1);
+        const slides = await fetch(`http://localhost:8080/dump`, {
+            method: "GET",
+        }).then((res) => res.text());
+
+        // console.log("Slide Contents:", slides);
+        const slidesArray = slides.split("|MYSPECIALDELIM|");
+
+        console.log(3)
+        // Delete all slides in slide deck.
+        for (const slide of slideDeckSlides()) {
+            slide.remove();
+        }
+        
+        console.log(4)
+        // Add all slides from backend.
+        const slideContainer = document.getElementById("slideContainer");
+        let slideCount = 1;
+        for (const _ of slidesArray) {
+            slideContainer.innerHTML += 
+            `<div class="slide">
+                <h1 class="slideNumber">${slideCount}</h1>
+                <img src="./assets/eye.png" class="hide">
+            </div>`
+            slideCount++;
+        };
+        console.log(5);
+
+        window.editor.editingSlide = 1;
+    } catch (e) {
+        console.log(e);
+        alert("Internal Error: Could not populate slides.")
+    };
+}
+
 export async function load() {
     try {
         const contents = await readFileFromSelection();
-        const slide = await fetch(`http://localhost:8080/load`, {
+        await fetch(`http://localhost:8080/load`, {
             method: "POST",
             body: contents,
         });
+
+        await formatSlides();
     } catch (_) {
         alert("Internal Error: Could not load file.");
     };
