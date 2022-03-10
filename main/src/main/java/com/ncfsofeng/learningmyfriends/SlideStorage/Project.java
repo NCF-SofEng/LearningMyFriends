@@ -1,10 +1,12 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Base64;
 import java.util.Scanner;
 import java.io.*;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -42,6 +44,32 @@ public class Project {
         }
     }
 
+    public BufferedImage decodeToImage(String imageString) {
+
+        BufferedImage image = null;
+        byte[] imageByte;
+        try {
+            Base64.Decoder decoder = Base64.getDecoder();
+            imageByte = decoder.decode(imageString);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    public void export(String slides){
+        String[] images = slides.split(Pattern.quote("|==|"));
+        BufferedImage[] Imagesinreadyform = new BufferedImage[images.length];
+        for (int i = 0; i < images.length; i++){
+            Imagesinreadyform[i] = this.decodeToImage(images[i]);
+        }
+
+    }
+
+
     public void save() {
         try{
                 JFrame parentFrame = new JFrame();
@@ -54,7 +82,10 @@ public class Project {
                     System.out.println("Save as file: " + fileToSave.getAbsolutePath());
                     FileWriter writer = new FileWriter(fileToSave);
                     for (int i = 0; i < slides.size(); i++) {
-                        writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide() + "\n");
+                        if ((i + 1) >= slides.size()){
+                            writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide());
+                        }
+                        else{writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide() + "\n");}
                     }
                     writer.close();
                 }
