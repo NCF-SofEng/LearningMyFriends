@@ -52,6 +52,7 @@ public class WebView extends JFrame {
         CefAppBuilder builder = new CefAppBuilder();
         // windowless_rendering_enabled must be set to false if not wanted. 
         builder.getCefSettings().windowless_rendering_enabled = useOSR;
+
         // USE builder.setAppHandler INSTEAD OF CefApp.addAppHandler!
         // Fixes compatibility issues with MacOSX
         builder.setAppHandler(new MavenCefAppHandlerAdapter() {

@@ -255,7 +255,6 @@ class Load implements HttpHandler {
     }
 
     public void handle(HttpExchange t) throws IOException {
-        // Read the body of t
         StringBuilder sb = new StringBuilder();
         {
             InputStream body = t.getRequestBody();
@@ -265,8 +264,8 @@ class Load implements HttpHandler {
             }
         }
 
-        // This contains all the data read from the file.
-        String fileBody = sb.toString();
+        String fileContents = sb.toString();
+        // Send the contents of slide 1 at the end of this pleaseeeee
 
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());

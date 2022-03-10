@@ -106,6 +106,26 @@ export async function runCodeBlock(elem) {
     }).then((res) => res.text());
 }
 
+async function readFileFromSelection() {
+    const f = document.createElement("input");
+    f.type = "file";
+    f.click();
+
+    const r = await new Promise((resolve) => {
+        f.onchange = async function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const data = e.target.result;
+                resolve(data);
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    return r;
+}
+
 export async function undoRedo(action, slideNumber = window.editor.editingSlide) {
     try {
         await fetch(`http://localhost:8080/undoredo?action=${action}&number=${slideNumber}`, {
@@ -130,4 +150,16 @@ export async function save() {
             method: "POST",
         });
     } catch (_) {};
+}
+
+export async function load() {
+    try {
+        const contents = await readFileFromSelection();
+        const slide = await fetch(`http://localhost:8080/load`, {
+            method: "POST",
+            body: contents,
+        });
+    } catch (_) {
+        alert("Internal Error: Could not load file.");
+    };
 }
