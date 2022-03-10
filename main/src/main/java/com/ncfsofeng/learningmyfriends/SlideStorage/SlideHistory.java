@@ -15,7 +15,7 @@ public class SlideHistory {
     }
     //This adds a new number to the end [back-end] of the sequence
     public void add(String history){
-        if (this.list.size() > 4){
+        if (this.list.size() > 5){
             this.list.removeFirst();
             this.list.add(history);
         }
