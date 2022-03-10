@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Project {
     public String projectName = "Unnamed Project";
@@ -43,8 +44,6 @@ public class Project {
 
     public void save() {
         try{
-
-
                 JFrame parentFrame = new JFrame();
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Specify a file to save");
@@ -75,8 +74,13 @@ public class Project {
             Scanner scanner = new Scanner(savedProject);
             String[] currentSlide;
             while (scanner.hasNextLine()) {
-                currentSlide =  scanner.nextLine().split("|==|");
-                this.addslide(Integer.parseInt(currentSlide[0]), currentSlide[1]);
+                currentSlide =  scanner.nextLine().split(Pattern.quote("||==||"));
+                System.out.println(currentSlide[0]);
+                System.out.println(currentSlide[1]);
+                if((this.search(Integer.parseInt(currentSlide[0])) == false)){
+                    this.addslide(Integer.parseInt(currentSlide[0]), currentSlide[1]);
+                }
+                else{this.editslide(Integer.parseInt(currentSlide[0]), currentSlide[1]);}
             }
             scanner.close();
     }
