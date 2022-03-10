@@ -1,3 +1,9 @@
+/**
+ * The base SlideShow class.
+ * 
+ * This was a later implementation that I decided to use a class approch for. In hindsight,
+ * I should have done classes for everything, but oh well. 
+ */
 export class SlideShow {
     static running = false;
     static slideshowRootDiv = null;
@@ -8,6 +14,10 @@ export class SlideShow {
     static pointer = false;
     static awaitingResult = false;
 
+    /**
+     * Starts the presentation mode, appending the grayscale element and the canvas container.
+     * @returns {Promise<void>}
+     */
     static start() {
         if (window.SlideShow.running) return;
 
@@ -27,6 +37,9 @@ export class SlideShow {
         this.presentSlide(SlideShow.currentSlide);
     }
     
+    /**
+     * Resizes the canvas to fit the viewport with as much zoom as possible to make it fill up the screen.
+     */
     static sizeCanvas() {
         /*
         The editor's canvas is of the size: width: 1056px; height: 642px;
@@ -41,15 +54,14 @@ export class SlideShow {
 
         const zoom = Math.min(width / editorWidth, height / editorHeight);
 
-        // console.log(zoom);
-        // console.log(`${editorWidth * zoom}px width`);
-        // console.log(`${editorHeight * zoom}px height`);
-        // SlideShow.slideshowCanvas.style.width = `${editorWidth * zoom}px`;
-        // SlideShow.slideshowCanvas.style.height = `${editorHeight * zoom}px`;
         SlideShow.slideshowCanvas.style.zoom = zoom;
 
     }
 
+    /**
+     * Stops the running presentation, setting all the variables to their default values.
+     * @returns {void}
+     */
     static stop() {
         if (!window.SlideShow.running) return;
 
@@ -59,6 +71,11 @@ export class SlideShow {
         SlideShow.currentSlide = 1;
     }
 
+    /**
+     * Presents a given slide at an index.
+     * @param {number} slideNumber The slide to render
+     * @returns {Promise<void>}
+     */
     static async presentSlide(slideNumber) {
         try {
             // Insure the amount of slides is not out of bounds.
@@ -73,11 +90,18 @@ export class SlideShow {
         }
     }
 
+    /**
+     * Just returns the html to create a slide number during the presentation.
+     * @returns {string} The HTML for the number
+     */
     static setSlideNumber() {
         return `<h1 class="presentationNumber">${SlideShow.currentSlide}</h1>`
     }
 }
 
+/**
+ * This one's just hadling keyboard input for the running SlideShow instance.
+ */
 window.addEventListener("keydown", (ev) => {
     if (!SlideShow.running) return;
     const slideCount = window.editor.utils.slideDeckSlides().length;

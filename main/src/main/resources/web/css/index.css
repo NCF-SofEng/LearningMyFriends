@@ -5,6 +5,10 @@
     padding: 0px;
 }
 
+body {
+    /* background-color: rgba(0, 0, 0, 0.24); */
+}
+
 /* #### START HEADER #### */
 .header {
     display: flex;
