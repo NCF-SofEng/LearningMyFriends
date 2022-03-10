@@ -310,7 +310,7 @@ class Export implements HttpHandler {
         }
 
         String contents = sb.toString();
-
+        this.project.export(contents);
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
