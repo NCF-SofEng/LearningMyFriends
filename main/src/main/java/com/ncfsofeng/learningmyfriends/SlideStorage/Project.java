@@ -5,7 +5,6 @@ import com.aspose.pdf.Page;
 import com.aspose.pdf.Image;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Base64;
 import java.util.Scanner;
@@ -88,7 +87,7 @@ public class Project {
                 page.getPageInfo().getMargin().setTop(0);
                 page.getPageInfo().getMargin().setLeft(0);
                 page.getPageInfo().getMargin().setRight(0);
-                page.setCropBox(new com.aspose.pdf.Rectangle(0, 0, 400, 400));
+                page.setCropBox(new com.aspose.pdf.Rectangle(0, 0, 1000, 1000));
 
 
                 // Add the image into paragraphs collection of the section

@@ -14,20 +14,20 @@ public class Slide implements Comparable<Slide>{
     public void newEdit(Slide newSlide){
         this.slideNumber = newSlide.getSlideNumber();
         this.history.add(newSlide.getHistory().getElement(0));
-        if (this.currentSlide < 4){
+        if (this.currentSlide < 5){
             this.currentSlide++;
         }
     }
 
     public String undo(){
         if(this.currentSlide != 0){
-            this.currentSlide--;
+            this.currentSlide = this.currentSlide - 2;
         }
         return this.getcurrentSlide();
     }
     public String redo(){
-        if(this.currentSlide != 4){
-            this.currentSlide++;
+        if(this.currentSlide != 5){
+            this.currentSlide = this.currentSlide + 2;
         }
         return this.getcurrentSlide();
     }
