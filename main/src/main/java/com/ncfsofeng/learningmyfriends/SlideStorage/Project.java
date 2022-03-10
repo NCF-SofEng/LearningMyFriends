@@ -5,6 +5,7 @@ import com.aspose.pdf.Page;
 import com.aspose.pdf.Image;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Base64;
 import java.util.Scanner;
@@ -63,36 +64,37 @@ public class Project {
     }
 
     public void export(String slides){
-        String[] images = slides.split(Pattern.quote("|==|"));
-        BufferedImage[] Imagesinreadyform = new BufferedImage[images.length];
-        for (int i = 0; i < images.length; i++){
-            Imagesinreadyform[i] = this.decodeToImage(images[i]);
+
+        String[] splits = slides.split("\\|==\\|");
+        // firstImg is a base64 string. Convert it to an image.
+        BufferedImage[] Imagesinreadyform = new BufferedImage[splits.length];
+        try {
+            for (int i = 0; i < splits.length; i++) {
+                byte[] imageBytes = java.util.Base64.getMimeDecoder().decode(splits[i].trim());
+                Imagesinreadyform[i] = ImageIO.read(new ByteArrayInputStream(imageBytes));
+            }
         }
+        catch(Exception e){}
         JFrame parentFrame = new JFrame();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Specify a file to save");
         int userSelection = fileChooser.showSaveDialog(parentFrame);
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             Document doc = new Document();
-            for (int j = 0; j < Imagesinreadyform.length; j++){
+            for (int j = 0; j < Imagesinreadyform.length; j++) {
                 // Add a page to pages collection of document
                 Page page = doc.getPages().add();
+                // Load the source image file to Stream object
 
                 Image exported = new Image();
 
                 exported.setBufferedImage(Imagesinreadyform[j]);
 
-                // Set margins so image will fit, etc.
-                page.getPageInfo().getMargin().setBottom(0);
-                page.getPageInfo().getMargin().setTop(0);
-                page.getPageInfo().getMargin().setLeft(0);
-                page.getPageInfo().getMargin().setRight(0);
-                page.setCropBox(new com.aspose.pdf.Rectangle(0, 0, 1000, 1000));
-
 
                 // Add the image into paragraphs collection of the section
                 page.getParagraphs().add(exported);
             }
+
             doc.save(fileChooser.getSelectedFile().getAbsolutePath() + ".pdf");
         }
     }

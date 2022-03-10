@@ -315,16 +315,16 @@ class Export implements HttpHandler {
 
         String contents = sb.toString();
 
-        String[] splits = contents.split("\\|==\\|");
+        //String[] splits = contents.split("\\|==\\|");
         // firstImg is a base64 string. Convert it to an image.
-        for (String split : splits) {
-            byte[] imageBytes = java.util.Base64.getMimeDecoder().decode(split.trim());
-            java.awt.image.BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
-            File outputfile = new File("C:\\Users\\ender\\Desktop\\sofeng\\LearningMyFriends\\export.png");
-            ImageIO.write(image, "png", outputfile);
-        }
+        //for (String split : splits) {
+            //byte[] imageBytes = java.util.Base64.getMimeDecoder().decode(split.trim());
+            //java.awt.image.BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+            //File outputfile = new File("C:\\Users\\ender\\Desktop\\sofeng\\LearningMyFriends\\export.png");
+            //ImageIO.write(image, "png", outputfile);
+        //}
 
-        // this.project.export(contents);
+        this.project.export(contents);
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
