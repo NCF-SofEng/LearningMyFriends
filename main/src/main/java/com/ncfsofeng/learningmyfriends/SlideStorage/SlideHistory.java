@@ -1,6 +1,5 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class SlideHistory {

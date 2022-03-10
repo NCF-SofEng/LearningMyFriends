@@ -1,5 +1,8 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
+import com.aspose.pdf.Document;
+import com.aspose.pdf.Page;
+import com.aspose.pdf.Image;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +69,33 @@ public class Project {
         for (int i = 0; i < images.length; i++){
             Imagesinreadyform[i] = this.decodeToImage(images[i]);
         }
+        JFrame parentFrame = new JFrame();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+        int userSelection = fileChooser.showSaveDialog(parentFrame);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            Document doc = new Document();
+            for (int j = 0; j < Imagesinreadyform.length; j++){
+                // Add a page to pages collection of document
+                Page page = doc.getPages().add();
 
+                Image exported = new Image();
+
+                exported.setBufferedImage(Imagesinreadyform[j]);
+
+                // Set margins so image will fit, etc.
+                page.getPageInfo().getMargin().setBottom(0);
+                page.getPageInfo().getMargin().setTop(0);
+                page.getPageInfo().getMargin().setLeft(0);
+                page.getPageInfo().getMargin().setRight(0);
+                page.setCropBox(new com.aspose.pdf.Rectangle(0, 0, 400, 400));
+
+
+                // Add the image into paragraphs collection of the section
+                page.getParagraphs().add(exported);
+            }
+            doc.save(fileChooser.getSelectedFile().getAbsolutePath() + ".pdf");
+        }
     }
 
 
