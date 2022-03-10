@@ -207,24 +207,16 @@ export async function load() {
 export async function exportSlides() {
     // Iterate over each slide in the slide deck, and get the image base64 data of background image
     const slides = slideDeckSlides();
-    let resultString = "";
-    let index = 0;
-    for (const slide of slides) {
-        const data = slide.style.backgroundImage.slice(4, -1).replace(/"/g, "");
-        resultString += data
-        if (index < slides.length - 1) {
-            if (resultString = "") {
-                resultString += "";
-            } else {
-                resultString.split(",")[0] += "|MYSPECIALDELIM|";
-            }
-        }
-    }
+
+    const body = slides
+        .filter(slide => slide.style.backgroundImage)
+        .map(slide => slide.style.backgroundImage.split(",")[1])
+        .join("|==|");
 
     try {
         await fetch(`http://localhost:8080/export`, {
             method: "POST",
-            body: resultString,
+            body: body,
         });
     } catch(_) {
         alert("Internal Error: Could not export slides.");
