@@ -30,6 +30,6 @@ window.addEventListener("click", async (ev) => {
         const slides = window.editor.utils.slideDeckSlides()
         const slide = slides[slides.length - 1];
 
-        window.editor.utils.swapSlide(slide, true);
+        await window.editor.utils.swapSlide(slide, true);
     }
 });

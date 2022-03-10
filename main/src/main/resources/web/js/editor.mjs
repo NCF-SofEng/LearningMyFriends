@@ -42,6 +42,7 @@ window.addEventListener("mousedown", async (ev) => {
             window.editor.editingSlide = clickedSlide;
             const html = await requestSlide(window.editor.editingSlide);
             window.editor.canvas.innerHTML = html;
+            await window.editor.utils.renderSlide();
         }
     } else if (editor.currentTool == "text" && ev.target.id == "canvas") {
 

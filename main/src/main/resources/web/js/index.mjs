@@ -9,7 +9,7 @@ window.addEventListener("load", async () => {
     if (eval(text) == true) {
         console.log("HTML 2 Canvas Loaded Successfully.");
     }
-    console.log("Starting Post Load Bindings. 2222")
+    console.log("Starting Post Load Bindings.")
     postLoad();
     // setInterval(renderSlides, 2000);
 });
@@ -35,15 +35,6 @@ function postLoad() {
     // const slide = slides[slides.length - 1];
 
     // window.editor.utils.swapSlide(slide, true);
-}
-
-async function renderSlides() {
-    // Get all slides in an array. God i love the spread operator
-    const slides = [ ...document.getElementsByClassName("slide") ];
-    const editingSlide = Globals.editingSlide;
-    // Render the slide and set the background image of the slide to the canvas.
-    const render = await html2canvas(document.getElementById("canvas"));
-    slides[editingSlide].style.backgroundImage = `url(${render.toDataURL()})`;
 }
 
 window.addEventListener("load", () => {
@@ -102,6 +93,10 @@ window.addEventListener("load", () => {
 
         m.createButton("Load", () => {
             window.editor.utils.load();
+        });
+
+        m.createButton("Export", () => {
+            window.editor.utils.exportSlides();
         });
 
         m.render();

@@ -66,11 +66,15 @@ export class SlideShow {
             if (slideCount == 0) return;
 
             const html = await window.editor.utils.requestSlide(slideNumber);
-            SlideShow.slideshowCanvas.innerHTML = html;
+            SlideShow.slideshowCanvas.innerHTML = html + SlideShow.setSlideNumber();
         } catch (e) {
             console.log(e);
             SlideShow.stop();
         }
+    }
+
+    static setSlideNumber() {
+        return `<h1 class="presentationNumber">${SlideShow.currentSlide}</h1>`
     }
 }
 
@@ -108,6 +112,17 @@ window.addEventListener("keydown", (ev) => {
                 SlideShow.pointer = false;
             }
         break;
+    }
+})
+
+window.addEventListener("click", async (ev) => {
+    if (SlideShow.running == true && (ev.target.tagName == "CODE" || ev.target.tagName == "PRE")) {
+        const r = await window.editor.utils.runCodeBlock(ev.target);
+        if (r == "|NONE|") {
+            return;
+        } else {
+            alert("Evaluated Response:\n" + r);
+        }
     }
 })
 

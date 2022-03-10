@@ -155,6 +155,7 @@
     background-color: white;
     overflow: hidden;
 }
+
 /* #### STOP EDITOR #### */
 
 /* #### START PRESENTATION #### */
@@ -174,10 +175,17 @@
     width: 1056px;
     height: 642px;
 
-    cursor: crosshair;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
+}
+
+.presentationNumber {
+    font-family: 'Work Sans', sans-serif;
+    float: bottom;
+    margin-bottom: 16px;
+    margin-left: 16px;
+    color: rgb(63, 59, 59);
 }
 
 /* Semantics! because I want it to look ✨perty✨*/

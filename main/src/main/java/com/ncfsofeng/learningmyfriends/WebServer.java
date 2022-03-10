@@ -33,6 +33,7 @@ public class WebServer {
         this._server.createContext("/save", new Save(this.project));
         this._server.createContext("/undoredo", new UndoRedo(this.project));
         this._server.createContext("/projectName", new ProjectNameUpdate(this.project));
+        this._server.createContext("/export", new Export(project));
 
         // Create a handler for every other path
         this._server.createContext("/", new FileHandler());
@@ -284,6 +285,32 @@ class Save implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
         // This is called when the user clicks the save button on the frontend.
         this.project.save();
+        String response = "Hello World!";
+        t.sendResponseHeaders(200, response.length());
+        t.getResponseBody().write(response.getBytes());
+        t.getResponseBody().close();
+    }
+}
+
+class Export implements HttpHandler {
+    private Project project = Project.getInstance();
+    public Export(Project p) {
+        this.project = p;
+    }
+
+    public void handle(HttpExchange t) throws IOException {
+        // This is called when the user clicks the export button on the frontend.
+        StringBuilder sb = new StringBuilder();
+        {
+            InputStream body = t.getRequestBody();
+            int b;
+            while ((b = body.read()) != -1) {
+                sb.append((char) b);
+            }
+        }
+
+        String contents = sb.toString();
+
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());

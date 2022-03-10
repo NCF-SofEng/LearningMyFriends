@@ -161,7 +161,7 @@ export async function formatSlides() {
 
         // console.log("Slide Contents:", slides);
         const slidesArray = slides.split("|MYSPECIALDELIM|");
-
+        slidesArray.pop();
         console.log(3)
         // Delete all slides in slide deck.
         for (const slide of slideDeckSlides()) {
@@ -198,7 +198,44 @@ export async function load() {
         });
 
         await formatSlides();
+        await renderSlide();
     } catch (_) {
         alert("Internal Error: Could not load file.");
     };
+}
+
+export async function exportSlides() {
+    // Iterate over each slide in the slide deck, and get the image base64 data of background image
+    const slides = slideDeckSlides();
+    const resultString = "";
+    let index = 0;
+    for (const slide of slides) {
+        const data = slide.style.backgroundImage.slice(4, -1).replace(/"/g, "");
+        resultString += data
+        if (index < slides.length - 1) {
+            if (resultString = "") {
+                resultString += "";
+            } else {
+                resultString.split(",")[0] += "|MYSPECIALDELIM|";
+            }
+        }
+    }
+
+    try {
+        await fetch(`http://localhost:8080/export`, {
+            method: "POST",
+            body: resultString,
+        });
+    } catch(_) {
+        alert("Internal Error: Could not export slides.");
+    }
+}
+
+export async function renderSlide() {
+    // Get all slides in an array. God i love the spread operator
+    const slides = [ ...document.getElementsByClassName("slide") ];
+    const editingSlide = window.editor.editingSlide - 1;
+    // Render the slide and set the background image of the slide to the canvas.
+    const render = await html2canvas(document.getElementById("canvas"));
+    slides[editingSlide].style.backgroundImage = `url(${render.toDataURL()})`;
 }
