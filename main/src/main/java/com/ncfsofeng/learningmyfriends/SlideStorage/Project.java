@@ -55,7 +55,7 @@ public class Project {
                     System.out.println("Save as file: " + fileToSave.getAbsolutePath());
                     FileWriter writer = new FileWriter(fileToSave);
                     for (int i = 0; i < slides.size(); i++) {
-                        writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "|==|" + slides.get(i).getcurrentSlide() + "\\");
+                        writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide() + "\n");
                     }
                     writer.close();
                 }
