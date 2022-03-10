@@ -71,10 +71,7 @@ public class Project {
         return slides.get(slideNum).redo();
     }
 
-    public void load(File savedProject){
-        try{
-            String[] savedName= savedProject.getName().split(".");
-            this.projectName = savedName[0];
+    public void load(String savedProject){
             Scanner scanner = new Scanner(savedProject);
             String[] currentSlide;
             while (scanner.hasNextLine()) {
@@ -82,8 +79,6 @@ public class Project {
                 this.addslide(Integer.parseInt(currentSlide[0]), currentSlide[1]);
             }
             scanner.close();
-        }
-        catch(IOException e){System.out.println("Error while reading file");}
     }
 
     public void addslide(int slideNumber, String slide){
