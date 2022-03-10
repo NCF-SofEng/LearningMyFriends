@@ -18,6 +18,19 @@
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Central</name>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+        <id>AsposeJavaAPI</id>
+        <name>Aspose Java API</name>
+        <url>https://repository.aspose.com/repo/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -31,6 +44,13 @@
       <groupId>me.friwi</groupId>
       <artifactId>jcefmaven</artifactId>
       <version>95.7.14.7</version>
+    </dependency>
+
+    <!-- For PDF conversion -->
+    <dependency>
+      <groupId>com.aspose</groupId>
+      <artifactId>aspose-pdf</artifactId>
+      <version>21.2</version>
     </dependency>
 
     <!-- For the Web Server -->
