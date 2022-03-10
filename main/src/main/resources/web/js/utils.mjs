@@ -123,3 +123,11 @@ export async function undoRedo(action, slideNumber = window.editor.editingSlide)
         alert("Internal Error: Could not undo/redo.")
     }
 }
+
+export async function save() {
+    try {
+        await fetch(`http://localhost:8080/save`, {
+            method: "POST",
+        });
+    } catch (_) {};
+}
