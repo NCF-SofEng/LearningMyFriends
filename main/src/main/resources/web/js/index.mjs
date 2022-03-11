@@ -2,6 +2,9 @@ import "./modules/slideInteractors.mjs"
 import "./presentation.mjs"
 import { Menu } from "./structs/Menu.mjs";
 
+/**
+ * Load the essential modules. In this case, HTML2Canvas on load.
+ */
 window.addEventListener("load", async () => {
     // Fetch the resource ./html2canvas.js
     const r = await fetch("/js/html2canvas.mjs")
@@ -14,6 +17,9 @@ window.addEventListener("load", async () => {
     // setInterval(renderSlides, 2000);
 });
 
+/**
+ * Bind some base functionalities to the entire webpage.
+ */
 function postLoad() {
     let elem = document.getElementsByClassName("titleText")[0];
     elem.addEventListener("blur", () => {
@@ -28,15 +34,11 @@ function postLoad() {
             elem.blur();
         }
     });
-
-    // Write the first slide to backend.
-    // window.editor.utils.slideEdited(1);
-    // const slides = window.editor.utils.slideDeckSlides()
-    // const slide = slides[slides.length - 1];
-
-    // window.editor.utils.swapSlide(slide, true);
 }
 
+/**
+ * Add the Menu Code to each button so dropdowns can be created & destroyed.
+ */
 window.addEventListener("load", () => {
     document.getElementById("toolsButton").addEventListener("click", (e) => {
         let m = new Menu(e.target);
@@ -102,5 +104,3 @@ window.addEventListener("load", () => {
         m.render();
     });
 });
-
-// Create the Menus onclick
