@@ -17,6 +17,12 @@ import javax.imageio.ImageIO;
 import com.ncfsofeng.learningmyfriends.SlideStorage.Project;
 import com.sun.net.httpserver.*;
 
+/**
+ * WebServer.java
+ * @author Ender Fluegge and Damien Razdan
+ *
+ */
+
 public class WebServer {
     private int _port;
     private HttpServer _server;
@@ -272,7 +278,6 @@ class Load implements HttpHandler {
         String fileContents = sb.toString();
         // Send the contents of slide 1 at the end of this pleaseeeee
         this.project.load(fileContents);
-
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());
         t.getResponseBody().write(response.getBytes());
@@ -314,16 +319,6 @@ class Export implements HttpHandler {
         }
 
         String contents = sb.toString();
-
-        //String[] splits = contents.split("\\|==\\|");
-        // firstImg is a base64 string. Convert it to an image.
-        //for (String split : splits) {
-            //byte[] imageBytes = java.util.Base64.getMimeDecoder().decode(split.trim());
-            //java.awt.image.BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
-            //File outputfile = new File("C:\\Users\\ender\\Desktop\\sofeng\\LearningMyFriends\\export.png");
-            //ImageIO.write(image, "png", outputfile);
-        //}
-
         this.project.export(contents);
         String response = "Hello World!";
         t.sendResponseHeaders(200, response.length());

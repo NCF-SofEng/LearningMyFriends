@@ -1,13 +1,14 @@
 package com.ncfsofeng.learningmyfriends;
 
 import java.awt.*;
-
-import com.ncfsofeng.learningmyfriends.SlideStorage.Project;
-
 /**
- * Hello world!
+ * App.java
+ * @author Ender Fluegge and Damien Razdan
+ *
+ *Main application for backend. Webserver is created here as well as the project being worked on!
  *
  */
+import com.ncfsofeng.learningmyfriends.SlideStorage.Project;
 public class App  
 {
     public static void main( String[] args ) throws Exception

@@ -5,14 +5,16 @@ import com.aspose.pdf.Page;
 import com.aspose.pdf.Image;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Base64;
 import java.util.Scanner;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
+/**
+ * Project.java
+ * @author Damien Razdan
+ *
+ */
 public class Project {
     public String projectName = "Unnamed Project";
     public static Project instance = new Project();
@@ -39,7 +41,6 @@ public class Project {
      */
     public boolean search(int slideNumber){
         // Log slideNumber compcared to slides.size()
-        System.out.println("Searching for slide: " + slideNumber + "of size: " + slides.size());
         if (slideNumber > slides.size() - 1) {
             return false;
         } else {
@@ -47,24 +48,7 @@ public class Project {
         }
     }
 
-    public BufferedImage decodeToImage(String imageString) {
-
-        BufferedImage image = null;
-        byte[] imageByte;
-        try {
-            Base64.Decoder decoder = Base64.getDecoder();
-            imageByte = decoder.decode(imageString);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            image = ImageIO.read(bis);
-            bis.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
-
     public void export(String slides){
-
         String[] splits = slides.split("\\|==\\|");
         // firstImg is a base64 string. Convert it to an image.
         BufferedImage[] Imagesinreadyform = new BufferedImage[splits.length];
@@ -109,7 +93,6 @@ public class Project {
                 File fileToSave;
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     fileToSave = fileChooser.getSelectedFile();
-                    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
                     FileWriter writer = new FileWriter(fileToSave);
                     for (int i = 0; i < slides.size(); i++) {
                         if ((i + 1) >= slides.size()){
@@ -136,8 +119,6 @@ public class Project {
             String[] currentSlide;
             while (scanner.hasNextLine()) {
                 currentSlide =  scanner.nextLine().split(Pattern.quote("||==||"));
-                System.out.println(currentSlide[0]);
-                System.out.println(currentSlide[1]);
                 if((this.search(Integer.parseInt(currentSlide[0])) == false)){
                     this.addslide(Integer.parseInt(currentSlide[0]), currentSlide[1]);
                 }
@@ -152,7 +133,6 @@ public class Project {
     }
 
     public String getSlide(int slideNum){
-        System.out.println("Getting slide " + slideNum + " of " + (this.slides.size() - 1));
 
         // if (slideNum > slides.size() - 1) { // Commenting this so we can always remember <3
 
@@ -163,17 +143,8 @@ public class Project {
     }
 
     public void editslide(int slideNumber, String slide){
-        System.out.println("Editing Slide " + slideNumber + " of " + this.slides.size());
         Slide s = slides.get(slideNumber);
-        System.out.println("Slide is null: " + (s == null));
         s.newEdit(new Slide(slideNumber, slide));
-    }
-
-    public void removeslide(int slide){
-        slides.remove(slide);
-        for (int i = slide; slides.get(i++) != null; i++){
-            slides.add(i, slides.get(i++));
-        }
     }
 
 }

@@ -1,7 +1,11 @@
 package com.ncfsofeng.learningmyfriends.SlideStorage;
 
 import java.util.LinkedList;
-
+/**
+ * SlideHistory.java
+ * @author Damien Razdan
+ *
+ */
 public class SlideHistory {
     LinkedList<String> list;
 
