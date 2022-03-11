@@ -13,7 +13,9 @@ import java.util.regex.Pattern;
 /**
  * Project.java
  * @author Damien Razdan
- *
+ * Contains the singleton project instance from which slides are added, removed, and accessed!
+ * Slides are stored in an Arraylist
+ * includes code from two external sources for saving, loading, and exporting.
  */
 public class Project {
     public String projectName = "Unnamed Project";
@@ -21,7 +23,7 @@ public class Project {
     public ArrayList<Slide> slides= new ArrayList<Slide>();
 
     private Project(){}
-
+    //getter and setter methods.
     public String getProjectName(){
         return this.projectName;
     }
@@ -35,9 +37,8 @@ public class Project {
     }
 
     /**
-     * Checks to see if there's a slide at the specified index.
-     * @param slideNumber
-     * @return true if there's a slide at the specified index, false otherwise.
+     * Searches for a particular slide to see if it already exists in the deck
+     * If it exists, returns true.
      */
     public boolean search(int slideNumber){
         // Log slideNumber compcared to slides.size()
@@ -47,7 +48,7 @@ public class Project {
             return true;
         }
     }
-
+    //Exports every slide into a PDF.
     public void export(String slides){
         String[] splits = slides.split("\\|==\\|");
         // firstImg is a base64 string. Convert it to an image.
@@ -83,7 +84,7 @@ public class Project {
         }
     }
 
-
+    //saves the slides as a generic file that can be retrieved with load in a folder of the user's choosing.
     public void save() {
         try{
                 JFrame parentFrame = new JFrame();
@@ -105,15 +106,15 @@ public class Project {
         }
         catch(IOException e){System.out.println("Error while writing to file");}
     }
-
+    //calls the slide class's undo
     public String undo(int slideNum){
         return slides.get(slideNum).undo();
     }
-
+    //calls the slide class's redo
     public String redo(int slideNum){
         return slides.get(slideNum).redo();
     }
-
+    //asks for a file to load back into the frontend as a project.
     public void load(String savedProject){
             Scanner scanner = new Scanner(savedProject);
             String[] currentSlide;
@@ -126,12 +127,12 @@ public class Project {
             }
             scanner.close();
     }
-
+    //Adds a new slide to the deck
     public void addslide(int slideNumber, String slide){
         // System.out.println("Slide Size: " + slides.size());
         slides.add(new Slide(slideNumber, slide));
     }
-
+    //retrieves a slide from the deck
     public String getSlide(int slideNum){
 
         // if (slideNum > slides.size() - 1) { // Commenting this so we can always remember <3
@@ -141,7 +142,7 @@ public class Project {
 
         return slides.get(slideNum).getcurrentSlide();
     }
-
+    //edits a slide from the deck.
     public void editslide(int slideNumber, String slide){
         Slide s = slides.get(slideNumber);
         s.newEdit(new Slide(slideNumber, slide));
