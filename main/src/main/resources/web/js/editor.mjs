@@ -2,6 +2,7 @@ import * as utils from "./utils.mjs";
 
 import { bindDefaults } from "./modules/textBox.mjs";
 
+// The global storage for everything the program uses.
 window.editor = {
     canvas: document.getElementById("canvas"),
 
