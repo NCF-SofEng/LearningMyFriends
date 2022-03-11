@@ -116,12 +116,14 @@ class FileHandler implements HttpHandler {
         }
 
         // Get the content of the file
-        byte[] content = new byte[0];
-        try {
-            content = Files.readAllBytes(Paths.get(resource.toURI()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        byte[] content;
+
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        content = classloader.getResourceAsStream("web" + path).readAllBytes();
+        // read from the input stream and store it in a byte array
+        // content = new byte[is.available()];
+        // is.read(content);
+        // is.close();
 
         // If the file ended with ".html", we assume it is a HTML file and set the mime type.
         String mime = "text/html";

@@ -14,8 +14,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <exec.mainClass>com.ncfsofeng.learningmyfriends.App</exec.mainClass>
   </properties>
 
   <repositories>
@@ -54,18 +56,18 @@
     </dependency>
 
     <!-- For the Web Server -->
-    <dependency>
+    <!-- <dependency>
       <groupId>com.sun.net.httpserver</groupId>
       <artifactId>http</artifactId>
       <version>20070405</version>
-    </dependency>
+    </dependency> -->
   </dependencies>
 
   <!-- Specify the entry class as java.com.ncfsofeng.learningmyfriends.App -->
   
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
@@ -76,6 +78,9 @@
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -88,6 +93,14 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>com.ncfsofeng.learningmyfriends.App</mainClass>
+                <addClasspath>true</addClasspath>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -109,13 +122,61 @@
       </plugins>
     </pluginManagement>
       <plugins>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+            <nonFilteredFileExtension>mjs</nonFilteredFileExtension>
+            <nonFilteredFileExtension>js</nonFilteredFileExtension>
+            <nonFilteredFileExtension>html</nonFilteredFileExtension>
+          </configuration>
+        </plugin>
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-compiler-plugin</artifactId>
               <configuration>
-                  <source>8</source>
-                  <target>8</target>
+                  <source>11</source>
+                  <target>11</target>
+                  <archive>
+                      <manifest>
+                          <addClasspath>true</addClasspath>
+                          <mainClass>com.ncfsofeng.learningmyfriends.App</mainClass>
+                      </manifest>
+                  </archive>
               </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.2.4</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <shadedArtifactAttached>true</shadedArtifactAttached>
+                        <transformers>
+                            <transformer implementation=
+                                "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>com.ncfsofeng.learningmyfriends.App</mainClass>
+                            </transformer>
+                        </transformers>
+                        <filters>
+                          <filter>
+                              <artifact>*:*</artifact>
+                              <excludes>
+                                  <exclude>META-INF/*.SF</exclude>
+                                  <exclude>META-INF/*.DSA</exclude>
+                                  <exclude>META-INF/*.RSA</exclude>
+                              </excludes>
+                          </filter>
+                      </filters>
+                    </configuration>
+                </execution>
+            </executions>
           </plugin>
       </plugins>
   </build>

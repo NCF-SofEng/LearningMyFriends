@@ -97,9 +97,9 @@ public class Project {
                     FileWriter writer = new FileWriter(fileToSave);
                     for (int i = 0; i < slides.size(); i++) {
                         if ((i + 1) >= slides.size()){
-                            writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide());
+                            writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide().replaceAll("\\n", ""));
                         }
-                        else{writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide() + "\n");}
+                        else{writer.append(Integer.toString(slides.get(i).getSlideNumber()) + "||==||" + slides.get(i).getcurrentSlide().replaceAll("\\n", "") + "\n");}
                     }
                     writer.close();
                 }

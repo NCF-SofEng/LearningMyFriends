@@ -2,6 +2,7 @@
 .vscode/
 jcef-bundle/
 main/target/
+submission/
 
 # Files
 debug.log
