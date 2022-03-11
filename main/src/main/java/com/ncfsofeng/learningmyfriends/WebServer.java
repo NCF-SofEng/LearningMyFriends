@@ -1,7 +1,6 @@
 package com.ncfsofeng.learningmyfriends;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -10,9 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.imageio.ImageIO;
 
 import com.ncfsofeng.learningmyfriends.SlideStorage.Project;
 import com.sun.net.httpserver.*;
@@ -21,6 +17,8 @@ import com.sun.net.httpserver.*;
  * WebServer.java
  * @author Ender Fluegge and Damien Razdan
  *
+ * This class is an HTTP server that handles replying to requests from the frontend to the backend,
+ * providing a form of one-way communication.
  */
 
 public class WebServer {
@@ -28,17 +26,23 @@ public class WebServer {
     private HttpServer _server;
     private Project project;
 
+    /**
+     * The Constructor for the WebServer class.
+     * @param port The port to listen on.
+     * @param p The Project instance for backend storage.
+     * @throws IOException
+     */
     public WebServer(int port, Project p) throws IOException {
         this._port = port;
         this._server = HttpServer.create(new InetSocketAddress(this._port), 0);
         this.project = p;
 
 
+        // Bind all the routes for API endpoints
         this._server.createContext("/ping", new IndexHandler());
         this._server.createContext("/update", new UpdateHandler(this.project));
         this._server.createContext("/getSlide", new SlideRequester(this.project));
         this._server.createContext("/dump", new DumpSlides(this.project));
-
         this._server.createContext("/load", new Load(this.project));
         this._server.createContext("/save", new Save(this.project));
         this._server.createContext("/undoredo", new UndoRedo(this.project));
@@ -50,10 +54,19 @@ public class WebServer {
         this._server.start();
     }
 
+    /**
+     * Return the owned server.
+     * @return
+     */
     public HttpServer getServer() {
         return this._server;
     }
 
+    /**
+     * Takes in a query string and returns a map of key-value pairs.
+     * @param query The Query String to parse
+     * @return A map of key-value pairs.
+     */
     public static Map<String, String> queryToMap(String query) {
         if(query == null) {
             return null;
@@ -73,6 +86,9 @@ public class WebServer {
 }
 
 
+/**
+ * This class handles requests to the root of the server.
+ */
 class IndexHandler implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
         String response = "Hello World!";
@@ -82,13 +98,16 @@ class IndexHandler implements HttpHandler {
     }
 }
 
+/**
+ * This class handles requests to specific files within the resources directory.
+ */
 class FileHandler implements HttpHandler {
     @Override
     public void handle(final HttpExchange t) throws IOException {
         // Get the path of the request
         String path = t.getRequestURI().getPath();
 
-        
+        // Make sure the 'web' directory is the root.
         URL resource = getClass().getClassLoader().getResource("web" + path);
         if (resource == null) {
             t.sendResponseHeaders(404, 0);
@@ -132,6 +151,9 @@ class FileHandler implements HttpHandler {
     }
 }
 
+/**
+ * This class is invoked on edit updates from the frontend
+ */
 class UpdateHandler implements HttpHandler {
     private Project project = Project.getInstance();
     public UpdateHandler(Project p) {
@@ -172,7 +194,9 @@ class UpdateHandler implements HttpHandler {
     }
 }
 
-// This is the retrevial class.
+/**
+ * This class serves slides to the frontend based on requests.
+ */
 class SlideRequester implements HttpHandler {
     private Project project = Project.getInstance();
     public SlideRequester(Project p) {
@@ -193,6 +217,9 @@ class SlideRequester implements HttpHandler {
     }
 }
 
+/**
+ * Dumps all slides into a string, sending it back to the frontend.
+ */
 class DumpSlides implements HttpHandler {
     private Project project = Project.getInstance();
     public DumpSlides(Project p) {
@@ -213,6 +240,9 @@ class DumpSlides implements HttpHandler {
     }
 }
 
+/**
+ * Triggered when a project's name updates
+ */
 class ProjectNameUpdate implements HttpHandler {
     private Project project = Project.getInstance();
     public ProjectNameUpdate(Project p) {
@@ -233,6 +263,9 @@ class ProjectNameUpdate implements HttpHandler {
     }
 }
 
+/**
+ * Triggered when an undo or redo request is sent.
+ */
 class UndoRedo implements HttpHandler {
     private Project project = Project.getInstance();
     public UndoRedo(Project p) {
@@ -259,6 +292,9 @@ class UndoRedo implements HttpHandler {
     }
 }
 
+/**
+ * Loads the project from the file system.
+ */
 class Load implements HttpHandler {
     private Project project = Project.getInstance();
     public Load(Project p) {
@@ -285,6 +321,9 @@ class Load implements HttpHandler {
     }
 }
 
+/**
+ * Saves the project to the file system.
+ */
 class Save implements HttpHandler {
     private Project project = Project.getInstance();
     public Save(Project p) {
@@ -301,6 +340,9 @@ class Save implements HttpHandler {
     }
 }
 
+/**
+ * Exports every slide to a single PDF file.
+ */
 class Export implements HttpHandler {
     private Project project = Project.getInstance();
     public Export(Project p) {
